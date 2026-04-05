@@ -895,12 +895,43 @@
                     }
                 });
 
-                // Tạo file tải về với tên đã chọn
-                const image = canvas.toDataURL("image/png", 1.0);
-                const link = document.createElement('a');
-                link.download = fileName;
-                link.href = image;
-                link.click();
+                // Hàm hỗ trợ tải xuống truyền thống (Fallback)
+                const triggerDownload = (blobData, name) => {
+                    const url = window.URL.createObjectURL(blobData);
+                    const link = document.createElement('a');
+                    link.style.display = 'none';
+                    link.href = url;
+                    link.download = name;
+                    document.body.appendChild(link);
+                    link.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(link);
+                };
+
+                // Chuyển Canvas thành Blob để tương thích với tính năng Chia sẻ (Share)
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+                const file = new File([blob], fileName, { type: 'image/png' });
+
+                // Kiểm tra xem trình duyệt/thiết bị có hỗ trợ tính năng Chia sẻ file không (Thường là Mobile)
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        // Mở hộp thoại Share của hệ điều hành (Lưu ảnh, Zalo, FB, AirDrop...)
+                        await navigator.share({
+                            files: [file],
+                            title: fileName
+                        });
+                    } catch (err) {
+                        // Nếu người dùng bấm Hủy hộp thoại share, không làm gì cả
+                        // Nếu lỗi do hệ thống, chuyển về cách tải xuống truyền thống
+                        if (err.name !== 'AbortError') {
+                            triggerDownload(blob, fileName);
+                        }
+                    }
+                } else {
+                    // Nếu dùng PC không hỗ trợ Share, tải xuống file trực tiếp
+                    triggerDownload(blob, fileName);
+                }
+
             } catch (error) {
                 console.error("Lỗi xuất ảnh:", error);
                 alert("Đã xảy ra lỗi khi xuất ảnh. Vui lòng thử lại!");
