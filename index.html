@@ -60,13 +60,70 @@
             text-shadow: 3px 3px 12px rgba(0,0,0,0.6);
         }
 
-        /* Các khối trang trí (Decorations) dùng chung */
+        /* Các khối trang trí nền (Decorations) dùng chung */
         .deco {
             position: absolute;
             pointer-events: none;
             z-index: 0;
             transition: all 0.5s ease;
         }
+
+        /* --- MỚI: LỚP OVERLAY CHỨA VECTOR TRANG TRÍ --- */
+        #vector-overlay {
+            z-index: 5; /* Đặt dưới content-layer nhưng trên deco */
+            pointer-events: none;
+        }
+
+        /* 1. Hoa văn góc (Corner Brackets) */
+        .vec-1 { background: 
+            linear-gradient(to right, rgba(255,255,255,0.6) 4px, transparent 4px) 40px 40px,
+            linear-gradient(to bottom, rgba(255,255,255,0.6) 4px, transparent 4px) 40px 40px,
+            linear-gradient(to left, rgba(255,255,255,0.6) 4px, transparent 4px) calc(100% - 40px) 40px,
+            linear-gradient(to bottom, rgba(255,255,255,0.6) 4px, transparent 4px) calc(100% - 40px) 40px,
+            linear-gradient(to right, rgba(255,255,255,0.6) 4px, transparent 4px) 40px calc(100% - 40px),
+            linear-gradient(to top, rgba(255,255,255,0.6) 4px, transparent 4px) 40px calc(100% - 40px),
+            linear-gradient(to left, rgba(255,255,255,0.6) 4px, transparent 4px) calc(100% - 40px) calc(100% - 40px),
+            linear-gradient(to top, rgba(255,255,255,0.6) 4px, transparent 4px) calc(100% - 40px) calc(100% - 40px);
+            background-repeat: no-repeat; background-size: 100px 100px; }
+
+        /* 2. Khung viền mỏng đôi (Double Thin Frame) */
+        .vec-2::before { content: ''; position: absolute; inset: 40px; border: 1px solid rgba(255,255,255,0.8); }
+        .vec-2::after { content: ''; position: absolute; inset: 50px; border: 1px solid rgba(255,255,255,0.4); }
+
+        /* 3. Chấm bi lơ lửng (Floating Dots) */
+        .vec-3 { background-image: radial-gradient(rgba(255,255,255,0.2) 2px, transparent 2px), radial-gradient(rgba(255,255,255,0.15) 3px, transparent 3px); background-size: 120px 120px, 180px 180px; background-position: 0 0, 60px 60px; }
+
+        /* 4. Tia sáng chéo (Diagonal Rays) */
+        .vec-4 { background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 80px); }
+
+        /* 5. Lưới điểm Tech (Tech Plus Grid) */
+        .vec-5 { background-image: linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px); background-size: 40px 40px; background-position: center center; mask-image: radial-gradient(circle, transparent 40%, black 100%); -webkit-mask-image: radial-gradient(circle, transparent 40%, black 100%);}
+
+        /* 6. Ruy băng góc mờ (Glass Ribbons) */
+        .vec-6::before, .vec-6::after { content: ''; position: absolute; width: 400px; height: 60px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-top: 1px solid rgba(255,255,255,0.3); border-bottom: 1px solid rgba(255,255,255,0.3); }
+        .vec-6::before { top: 60px; left: -100px; transform: rotate(-45deg); }
+        .vec-6::after { bottom: 60px; right: -100px; transform: rotate(-45deg); }
+
+        /* 7. Ngôi sao chìm (Subtle Stars) */
+        .vec-7 { background-image: url('data:image/svg+xml;utf8,<svg width="60" height="60" viewBox="0 0 24 24" fill="white" fill-opacity="0.1" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L14.4 9.6H22L15.8 14.4L18.2 22L12 17.2L5.8 22L8.2 14.4L2 9.6H9.6L12 2Z"/></svg>'); background-size: 80px 80px; mask-image: linear-gradient(to bottom, black 0%, transparent 80%); -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 80%); }
+
+        /* 8. Viền dập sóng (Scalloped Edge) */
+        .vec-8::before { content: ''; position: absolute; inset: 20px; border: 2px solid rgba(255,255,255,0.2); }
+        .vec-8 { background-image: radial-gradient(circle at 15px 15px, rgba(255,255,255,0.15) 5px, transparent 6px); background-size: 30px 30px; background-position: -15px -15px; }
+
+        /* 9. Khung khối lệnh Hình học (Geometric Box) */
+        .vec-9::before { content: ''; position: absolute; top: 40px; bottom: 40px; left: 40px; right: 40px; border-left: 4px solid rgba(255,255,255,0.5); border-right: 4px solid rgba(255,255,255,0.5); }
+        .vec-9::after { content: ''; position: absolute; top: 60px; bottom: 60px; left: 20px; right: 20px; border-top: 4px solid rgba(255,255,255,0.5); border-bottom: 4px solid rgba(255,255,255,0.5); }
+
+        /* 10. Pháo giấy nhạt (Soft Confetti) */
+        .vec-10 { background-image: 
+            radial-gradient(circle, rgba(255,255,255,0.3) 4px, transparent 5px),
+            radial-gradient(circle, rgba(255,255,255,0.2) 6px, transparent 7px),
+            radial-gradient(circle, rgba(255,255,255,0.1) 8px, transparent 9px);
+            background-size: 150px 150px, 220px 220px, 300px 300px;
+            background-position: 0 0, 75px 110px, 150px 50px;
+        }
+
         .content-layer {
             position: relative;
             z-index: 10;
@@ -295,8 +352,7 @@
         .title-style-10 h2 { font-family: 'Pacifico', cursive; font-weight: normal; }
 
 
-        /* --- MỚI: 10 BỐ CỤC CHỮ NGHỆ THUẬT (LAYOUTS) --- */
-        /* Sử dụng Font Tiếng Việt chuẩn */
+        /* --- MỚI: 20 BỐ CỤC CHỮ NGHỆ THUẬT (LAYOUTS) --- */
         
         /* 1. Chuẩn mực (Mặc định) */
         .layout-1 { align-items: center; text-align: center; font-family: 'Montserrat', sans-serif; }
@@ -363,6 +419,83 @@
         .layout-10 #student-name { font-family: 'Yeseva One', serif; }
         .layout-10 #commendation-text { font-family: 'Sriracha', cursive; font-size: 1.8rem; transform: rotate(-2deg); background: rgba(0,0,0,0.2); padding: 15px 30px; border-radius: 15px; }
 
+        /* 11. Cyberpunk Đột Phá (Righteous + Jura) */
+        .layout-11 { align-items: flex-end; text-align: right; padding-right: 60px; font-family: 'Jura', sans-serif; }
+        .layout-11 #commendation-title h2 { font-family: 'Righteous', cursive; letter-spacing: 2px; }
+        .layout-11 #student-name-container { flex-direction: row-reverse; justify-content: flex-start; }
+        .layout-11 #student-name { font-style: italic; }
+        .layout-11 #commendation-text { text-align: right; border-right: 4px solid var(--text-color); padding-right: 15px; }
+
+        /* 12. Thư Báo Cổ Điển (Prata + Lora) */
+        .layout-12 { align-items: center; text-align: center; font-family: 'Lora', serif; }
+        .layout-12 #commendation-title { border-top: 2px solid var(--text-color); border-bottom: 2px solid var(--text-color); padding: 15px 0; margin-bottom: 30px; width: 80%; display: flex; flex-direction: column; align-items: center; }
+        .layout-12 #commendation-title h2 { font-family: 'Prata', serif; letter-spacing: 4px; text-align: center; }
+        .layout-12 #student-name-container { flex-direction: column; gap: 15px; }
+        .layout-12 #commendation-text { max-width: 700px; font-size: 1.5rem; text-align: center; }
+
+        /* 13. Brutalism To Bản (Bebas Neue) */
+        .layout-13 { align-items: flex-start; text-align: left; padding-left: 40px; font-family: 'Be Vietnam Pro', sans-serif; }
+        .layout-13 #commendation-title { display: flex; flex-direction: column; align-items: flex-start; }
+        .layout-13 #commendation-title h2 { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; line-height: 0.9; letter-spacing: 2px; margin: 0; text-align: left; }
+        .layout-13 #student-name-container { flex-direction: row; justify-content: flex-start; margin-top: 10px; }
+        .layout-13 #student-name { font-family: 'Bebas Neue', sans-serif; font-size: 7rem; line-height: 0.9; text-align: left; }
+        .layout-13 #commendation-text { margin-top: 20px; font-weight: 700; max-width: 600px; text-align: left; }
+
+        /* 14. Thanh Lịch Thiệp Cưới (Cinzel + Dancing Script) */
+        .layout-14 { align-items: center; text-align: center; font-family: 'Cinzel', serif; }
+        .layout-14 #commendation-title h2 { letter-spacing: 6px; font-weight: 400; text-align: center; }
+        .layout-14 #student-name-container { flex-direction: column; gap: 20px; }
+        .layout-14 #student-name { font-family: 'Dancing Script', cursive; font-size: 6rem; text-transform: capitalize; letter-spacing: 0; text-align: center; }
+        .layout-14 #commendation-text { font-family: 'Lora', serif; font-style: italic; font-size: 1.4rem; letter-spacing: 1px; max-width: 650px; text-align: center; }
+
+        /* 15. Công Nghệ Tương Lai (Jura) */
+        .layout-15 { align-items: stretch; text-align: justify; font-family: 'Jura', sans-serif; padding: 0 50px; }
+        .layout-15 #commendation-title { display: flex; flex-direction: column; align-items: flex-end; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 10px; }
+        .layout-15 #commendation-title h2 { letter-spacing: 5px; text-align: right; }
+        .layout-15 #student-name-container { flex-direction: row; justify-content: space-between; margin-top: 20px; border-bottom: 1px dashed rgba(255,255,255,0.3); padding-bottom: 20px; }
+        .layout-15 #student-name { letter-spacing: 5px; text-align: left; }
+        .layout-15 #commendation-text { font-weight: 700; margin-top: 20px; background: rgba(255,255,255,0.1); padding: 15px; border-left: 5px solid var(--text-color); text-align: left; }
+
+        /* 16. Năng Động Vui Tươi (Comfortaa + Sriracha) */
+        .layout-16 { align-items: center; text-align: center; font-family: 'Comfortaa', cursive; }
+        .layout-16 #commendation-title { transform: rotate(-3deg); display: flex; flex-direction: column; align-items: center; }
+        .layout-16 #commendation-title h2 { font-family: 'Sriracha', cursive; text-align: center; }
+        .layout-16 #student-name-container { flex-direction: row; gap: 20px; transform: rotate(2deg); margin-top: 20px; }
+        .layout-16 #student-name { font-family: 'Sriracha', cursive; text-align: center; }
+        .layout-16 #commendation-text { margin-top: 30px; font-weight: 700; background: rgba(255,255,255,0.85); color: #111; padding: 15px 25px; border-radius: 30px; transform: rotate(-1deg); text-shadow: none; box-shadow: 0 10px 20px rgba(0,0,0,0.2); text-align: center; }
+
+        /* 17. Tạp Chí Thể Thao (Oswald) */
+        .layout-17 { align-items: center; text-align: center; font-family: 'Oswald', sans-serif; }
+        .layout-17 #commendation-title { display: flex; flex-direction: column; align-items: center; }
+        .layout-17 #commendation-title h2 { text-transform: uppercase; font-weight: 700; letter-spacing: 2px; text-align: center; }
+        .layout-17 #student-name-container { flex-direction: column; background: rgba(255,255,255,0.95); padding: 20px; width: 100%; transform: skewY(-2deg); margin: 30px 0; border-radius: 10px; box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
+        .layout-17 #student-name { color: #111 !important; text-shadow: none !important; letter-spacing: 5px; -webkit-text-fill-color: #111; text-align: center; }
+        .layout-17 #student-name-container > div { filter: invert(1); } /* Đảo màu badge lớp sang đen */
+        .layout-17 #commendation-text { font-family: 'Be Vietnam Pro', sans-serif; font-size: 1.4rem; max-width: 700px; text-transform: uppercase; font-weight: 700; text-align: center; }
+
+        /* 18. Mộng Mơ Lãng Mạn (Charm) */
+        .layout-18 { align-items: flex-end; text-align: right; padding-right: 50px; font-family: 'Lora', serif; }
+        .layout-18 #commendation-title { display: flex; flex-direction: column; align-items: flex-end; }
+        .layout-18 #commendation-title h2 { font-family: 'Charm', cursive; font-size: 3.5rem; text-transform: none; text-align: right; }
+        .layout-18 #student-name-container { flex-direction: row-reverse; margin: 20px 0; }
+        .layout-18 #student-name { font-family: 'Charm', cursive; text-transform: none; font-size: 6rem; text-align: right; }
+        .layout-18 #commendation-text { font-style: italic; opacity: 0.85; max-width: 600px; text-align: right; }
+
+        /* 19. Tương Phản Sắc Nét (Montserrat Black) */
+        .layout-19 { align-items: flex-start; text-align: left; padding-left: 50px; font-family: 'Montserrat', sans-serif; }
+        .layout-19 #commendation-title { display: flex; flex-direction: column; align-items: flex-start; }
+        .layout-19 #commendation-title h2 { font-weight: 900; font-size: 4rem; line-height: 1.1; margin-bottom: 5px; text-align: left; }
+        .layout-19 #student-name-container { flex-direction: row; border-left: 8px solid var(--text-color); padding-left: 20px; margin-left: 5px; }
+        .layout-19 #student-name { font-weight: 900; letter-spacing: -2px; text-align: left; }
+        .layout-19 #commendation-text { margin-top: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; max-width: 650px; text-align: left; }
+
+        /* 20. Phá Cách Bất Đối Xứng */
+        .layout-20 { align-items: stretch; font-family: 'Be Vietnam Pro', sans-serif; padding: 0 40px; }
+        .layout-20 #commendation-title { display: flex; flex-direction: column; align-items: flex-start; }
+        .layout-20 #commendation-title h2 { text-align: left; }
+        .layout-20 #student-name-container { flex-direction: row-reverse; justify-content: flex-start; margin-top: 15px; }
+        .layout-20 #student-name { text-align: right; }
+        .layout-20 #commendation-text { text-align: center; margin-top: 30px; font-style: italic; border: 1px dashed rgba(255,255,255,0.5); padding: 15px; border-radius: 10px; }
 
         /* CÁC TEMPLATE (MẪU) - Bổ sung biến --bg-color-end để trộn màu fade đuôi ảnh */
         
@@ -417,8 +550,6 @@
         .tpl-10 .deco-1 { width: 600px; height: 600px; border: 10px solid #f1f5f9; border-radius: 50%; top: -200px; right: -200px; }
         .tpl-10 .deco-2 { width: 400px; height: 400px; border: 10px solid #f1f5f9; border-radius: 50%; bottom: -150px; left: -150px; }
 
-        /* --- 10 TEMPLATE MỚI (VECTOR/GRADIENT HIỆN ĐẠI) --- */
-        
         /* 11. Cyber Neon (Đen/Hồng/Xanh) */
         .tpl-11 { --bg-color-end: #0b0f19; background: #0b0f19; }
         .tpl-11 .deco-1 { width: 100%; height: 200px; top: 0; left: 0; background: repeating-linear-gradient(45deg, #ff007a15, #ff007a15 10px, transparent 10px, transparent 20px); border-bottom: 3px solid #ff007a; clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%); }
@@ -469,6 +600,20 @@
         .tpl-20 .deco-1 { width: 0; height: 0; border-left: 540px solid transparent; border-right: 540px solid transparent; border-top: 250px solid #e11d48; top: 0; left: 0; opacity: 0.9; filter: drop-shadow(0 20px 10px rgba(0,0,0,0.5)); }
         .tpl-20 .deco-2 { width: 0; height: 0; border-left: 540px solid transparent; border-right: 540px solid transparent; border-bottom: 250px solid #4f46e5; bottom: 0; left: 0; opacity: 0.9; filter: drop-shadow(0 -20px 10px rgba(0,0,0,0.5)); }
 
+        /* --- 4 TEMPLATE MỚI (DẠNG ẢNH NỀN THỰC TẾ) --- */
+        
+        /* 21. Vinh Quang Sân Khấu (Golden Bokeh) */
+        .tpl-21 { --bg-color-end: #1a1005; background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(26,16,5,0.95)), url('https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80') center/cover; }
+        
+        /* 22. Thư Viện Cổ Điển (Classic Library) */
+        .tpl-22 { --bg-color-end: #1c1512; background: linear-gradient(to bottom, rgba(28,21,18,0.4), rgba(28,21,18,0.98)), url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80') center/cover; }
+        
+        /* 23. Bầu Trời Bình Minh (Bright Sky) */
+        .tpl-23 { --bg-color-end: #e0f2fe; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(224,242,254,1)), url('https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80') center/cover; }
+        
+        /* 24. Không Gian Nghệ Thuật (Fluid Abstract) */
+        .tpl-24 { --bg-color-end: #0f172a; background: linear-gradient(to bottom, rgba(15,23,42,0.3), rgba(15,23,42,0.98)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80') center/cover; }
+
         /* CSS cho Scaler để hiển thị vừa màn hình */
         #poster-viewport {
             width: 100%;
@@ -499,7 +644,7 @@
                 <h1 class="text-2xl font-bold text-indigo-600 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1zm-5 8.274l-.818 2.552c.25.112.526.174.818.174.292 0 .569-.062.818-.174L5 10.274zm10 0l-.818 2.552c.25.112.526.174.818.174.292 0 .569-.062.818-.174L15 10.274z" clip-rule="evenodd" />
-                    </svg>
+                </svg>
                     Trình Tạo Poster Tôn Vinh
                 </h1>
                 <p class="text-sm text-gray-600 mt-1 md:ml-10">Phát triển bởi: <span class="font-bold text-indigo-700">Thầy Vũ Tiến Lực</span> - Trường THPT Nguyễn Hữu Cảnh - TP.HCM</p>
@@ -521,6 +666,9 @@
                         <div class="deco deco-1"></div>
                         <div class="deco deco-2"></div>
                         
+                        <!-- LỚP VECTOR TRANG TRÍ LÊN TRÊN NỀN -->
+                        <div id="vector-overlay" class="absolute inset-0 pointer-events-none z-[5] transition-all duration-500"></div>
+
                         <!-- Lớp nội dung -->
                         <div class="content-layer">
                             
@@ -659,6 +807,44 @@
                 </div>
             </div>
 
+            <!-- CHỨC NĂNG THÔNG MINH (TRỘN NGẪU NHIÊN) - Đưa ra ngoài -->
+            <div class="mb-6">
+                <label class="block text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-3">2. 🪄 Phép màu ngẫu nhiên</label>
+                <button onclick="randomizeDesign()" class="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                    </svg>
+                    Trộn Giao Diện & Bố Cục
+                </button>
+                <p class="text-xs text-gray-500 text-center mt-2">Nhấn để hệ thống tự động thiết kế cho bạn 1 phiên bản độc đáo!</p>
+            </div>
+
+            <!-- Gợi ý Lời Tuyên Dương - Đưa ra ngoài -->
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">3. Gợi ý Lời tuyên dương</label>
+                <select id="quote-select" onchange="updateQuote(this.value)" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5">
+                    <option value="">-- Chọn một gợi ý (Hoặc tự gõ) --</option>
+                    <option value="Vì những thành tích xuất sắc, nỗ lực không ngừng trong học tập và phong trào thi đua của lớp.">Thành tích toàn diện (Mặc định)</option>
+                    <option value="Đã xuất sắc đạt danh hiệu Thủ khoa và luôn là tấm gương sáng cho bạn bè noi theo.">Học tập: Thủ khoa/Học bổng</option>
+                    <option value="Ghi nhận sự tiến bộ vượt bậc, tinh thần tự giác và luôn sẵn sàng giúp đỡ bạn bè cùng tiến bộ.">Học tập: Tiến bộ vượt bậc</option>
+                    <option value="Cán bộ lớp gương mẫu, nhiệt tình, có tinh thần trách nhiệm cao và hoàn thành xuất sắc nhiệm vụ.">Phong trào: Cán bộ xuất sắc</option>
+                    <option value="Bí thư năng nổ, dẫn dắt tập thể đạt nhiều thành tích và danh hiệu Chi đoàn vững mạnh.">Phong trào: Đoàn thanh niên</option>
+                    <option value="Ngôi sao thể thao của trường, mang về nhiều huy chương và khơi dậy tinh thần thể thao học đường.">Năng khiếu: Thể dục thể thao</option>
+                    <option value="Đạt giải thưởng cao trong kỳ thi Học sinh giỏi các cấp, mang lại niềm tự hào cho nhà trường.">Thi đua: Học sinh giỏi</option>
+                    <option value="Tuyên dương tinh thần 'Người tốt việc tốt', nhặt được của rơi trả lại người mất, lan tỏa nghĩa cử cao đẹp.">Đạo đức: Người tốt việc tốt</option>
+                    <option value="Tự hào là tấm gương sáng về nghị lực vượt khó, luôn vươn lên đạt thành tích cao trong học tập.">Nghị lực: Vượt khó vươn lên</option>
+                    <option value="Đạt điểm tuyệt đối trong các kỳ thi, thể hiện tư duy nhạy bén và tinh thần ham học hỏi đáng quý.">Học tập: Điểm tuyệt đối</option>
+                    <option value="Thủ lĩnh thanh niên nhiệt huyết, truyền cảm hứng tích cực và gắn kết sức mạnh của toàn thể chi đoàn.">Phong trào: Thủ lĩnh truyền cảm hứng</option>
+                    <option value="Đóng góp xuất sắc vào các hoạt động thiện nguyện, lan tỏa tấm lòng nhân ái đến cộng đồng.">Hoạt động: Thiện nguyện/Cộng đồng</option>
+                    <option value="Tài năng nghệ thuật nổi bật, mang lại tiết mục ấn tượng và cống hiến hết mình cho phong trào.">Năng khiếu: Văn nghệ</option>
+                    <option value="Ghi nhận tinh thần đồng đội xuất sắc, luôn kề vai sát cánh cùng tập thể tiến lên phía trước.">Đoàn kết: Tinh thần đồng đội</option>
+                    <option value="Đạt giải cao trong kỳ thi Khoa học Kỹ thuật, khẳng định đam mê sáng tạo và tư duy đột phá.">Sáng tạo: Nghiên cứu Khoa học</option>
+                    <option value="Tuyên dương thành tích xuất sắc trong học tập ngoại ngữ, tự tự vươn ra hội nhập quốc tế.">Học tập: Ngoại ngữ xuất sắc</option>
+                    <option value="Lớp trưởng mẫu mực, tận tâm với lớp, là cầu nối vững chắc giữa thầy cô và tập thể học sinh.">Trách nhiệm: Lớp trưởng mẫu mực</option>
+                    <option value="Học sinh tiêu biểu toàn diện, dung hòa xuất sắc giữa thành tích học tập và hoạt động ngoại khóa.">Toàn diện: Học tập & Ngoại khóa</option>
+                </select>
+            </div>
+
             <!-- Nút Toggle Menu Ẩn/Hiện -->
             <button onclick="toggleAdvancedOptions()" class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold py-3 px-4 rounded-lg flex justify-between items-center mb-6 transition duration-200 border border-indigo-200 shadow-sm">
                 <span id="toggle-text">Hiển thị thêm tùy chọn (Màu, Mẫu, Chữ...)</span>
@@ -671,7 +857,7 @@
             <div id="advanced-options" class="hidden flex-col gap-2">
                 <!-- Chọn Kiểu Khung Ảnh -->
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">2. Chọn kiểu khung ảnh</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">4. Chọn kiểu khung ảnh</label>
                     <select id="mode-select" onchange="changeImageMode(this.value)" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5">
                         <optgroup label="Khung ảnh cơ bản">
                             <option value="1">Tròn tiêu chuẩn (Vừa)</option>
@@ -699,14 +885,20 @@
 
                 <!-- Chọn màu chữ -->
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">3. Chọn màu chữ</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">5. Chọn màu chữ</label>
                     <div class="flex items-center gap-3">
                         <input type="color" id="color-picker" value="#ffffff" class="w-12 h-12 rounded cursor-pointer border-0 p-0">
                         <span class="text-sm text-gray-600">Màu hiện tại (Click để đổi)</span>
-                    </div>
+                        <optgroup label="Giấy Khen Vinh Danh (Mới)">
+                            <option value="12">🏆 Vòng Nguyệt Quế Vàng (Lấp lánh)</option>
+                            <option value="13">🥈 Vòng Nguyệt Quế Bạc (Lấp lánh)</option>
+                            <option value="14">💎 Vòng Nguyệt Quế Kim Cương (Phát sáng)</option>
+                            <option value="15">🌸 Vòng Nguyệt Quế Hoa Hồng (Độc đáo)</option>
+                        </optgroup>
+                    </select>
                 </div>
 
-                <!-- MỚI: CHỌN BỐ CỤC CHỮ NGHỆ THUẬT -->
+                <!-- Chọn màu chữ -->
                 <div class="mb-6">
                     <label class="block text-sm font-bold text-indigo-700 mb-2">✦ Bố cục chữ nghệ thuật (Tổng thể)</label>
                     <select id="text-layout-select" onchange="changeTextLayout(this.value)" class="w-full bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-medium shadow-sm">
@@ -720,6 +912,35 @@
                         <option value="8">🏗️ Khối Kiến trúc (Oswald, Ép vuông vức)</option>
                         <option value="9">😊 Thân thiện & Tròn trịa (Comfortaa)</option>
                         <option value="10">📻 Retro Nghệ thuật (Yeseva One & Sriracha)</option>
+                        <!-- 10 Lựa chọn mới -->
+                        <option value="11">🤖 Cyberpunk Đột Phá (Jura & Righteous)</option>
+                        <option value="12">📜 Thư Báo Cổ Điển (Prata, Viền kép)</option>
+                        <option value="13">⬛ Brutalism To Bản (Bebas, Căn trái)</option>
+                        <option value="14">🕊️ Thanh Lịch Thiệp Cưới (Cinzel + Dancing)</option>
+                        <option value="15">🌐 Công Nghệ Tương Lai (Jura, Căn phải)</option>
+                        <option value="16">🎈 Năng Động Vui Tươi (Comfortaa + Sriracha)</option>
+                        <option value="17">🏅 Tạp Chí Thể Thao (Oswald, Nền nổi bật)</option>
+                        <option value="18">💕 Mộng Mơ Lãng Mạn (Charm, Căn lệch)</option>
+                        <option value="19">🔲 Tương Phản Sắc Nét (Montserrat Black)</option>
+                        <option value="20">🎭 Phá Cách Bất Đối Xứng (Trái phải đan xen)</option>
+                    </select>
+                </div>
+
+                <!-- CHỌN PHONG CÁCH VECTOR TRANG TRÍ -->
+                <div class="mb-6">
+                    <label class="block text-sm font-bold text-indigo-700 mb-2">✦ Vector Trang Trí Bổ Sung</label>
+                    <select id="vector-style-select" onchange="changeVectorStyle(this.value)" class="w-full bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-medium shadow-sm">
+                        <option value="0">❌ Không dùng (Mặc định)</option>
+                        <option value="1">🌿 Hoa văn góc thanh lịch</option>
+                        <option value="2">🔳 Khung viền mỏng Minimalist</option>
+                        <option value="3">✨ Chấm bi lơ lửng</option>
+                        <option value="4">⚡ Tia sáng chéo</option>
+                        <option value="5">▦ Lưới chấm Tech</option>
+                        <option value="6">🎀 Ruy băng góc</option>
+                        <option value="7">⭐ Ngôi sao rơi</option>
+                        <option value="8">🌊 Viền dập sóng</option>
+                        <option value="9">⬡ Khung hình học</option>
+                        <option value="10">🎉 Pháo giấy Confetti</option>
                     </select>
                 </div>
 
@@ -783,34 +1004,13 @@
                         <button onclick="changeTemplate(18, '#db2777')" class="tpl-btn bg-gradient-to-r from-pink-50 to-pink-200 text-pink-700 font-medium py-2 px-2 rounded shadow hover:shadow-md transition text-sm">〰️ Lượn Sóng</button>
                         <button onclick="changeTemplate(19, '#ffffff')" class="tpl-btn bg-gradient-to-r from-green-600 to-green-800 text-white font-medium py-2 px-2 rounded shadow hover:shadow-md transition text-sm">🌿 Nhiệt Đới</button>
                         <button onclick="changeTemplate(20, '#ffffff')" class="tpl-btn bg-gradient-to-r from-gray-700 to-gray-900 text-white font-medium py-2 px-2 rounded shadow hover:shadow-md transition text-sm">💎 Đa Giác 3D</button>
+                        
+                        <!-- 4 Mẫu Ảnh Nền Thực Tế -->
+                        <button onclick="changeTemplate(21, '#ffffff')" class="tpl-btn bg-gradient-to-r from-yellow-600 to-black text-yellow-400 font-medium py-2 px-2 rounded shadow hover:shadow-md transition text-sm">🌟 Ánh Sáng</button>
+                        <button onclick="changeTemplate(22, '#eaddcf')" class="tpl-btn bg-gradient-to-r from-amber-900 to-black text-amber-100 font-medium py-2 px-2 rounded shadow hover:shadow-md transition text-sm">📚 Thư Viện</button>
+                        <button onclick="changeTemplate(23, '#1e3a8a')" class="tpl-btn bg-gradient-to-r from-sky-300 to-sky-100 text-sky-900 font-medium py-2 px-2 rounded shadow hover:shadow-md transition text-sm">☁️ Bầu Trời</button>
+                        <button onclick="changeTemplate(24, '#ffffff')" class="tpl-btn bg-gradient-to-r from-purple-900 to-slate-900 text-white font-medium py-2 px-2 rounded shadow hover:shadow-md transition text-sm">🎨 Trừu Tượng</button>
                     </div>
-                </div>
-
-                <!-- Gợi ý Lời Tuyên Dương -->
-                <div class="mb-8">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">7. Gợi ý Lời tuyên dương</label>
-                    <select id="quote-select" onchange="updateQuote(this.value)" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5">
-                        <option value="">-- Chọn một gợi ý (Hoặc tự gõ) --</option>
-                        <option value="Vì những thành tích xuất sắc, nỗ lực không ngừng trong học tập và phong trào thi đua của lớp.">Thành tích toàn diện (Mặc định)</option>
-                        <option value="Đã xuất sắc đạt danh hiệu Thủ khoa và luôn là tấm gương sáng cho bạn bè noi theo.">Học tập: Thủ khoa/Học bổng</option>
-                        <option value="Ghi nhận sự tiến bộ vượt bậc, tinh thần tự giác và luôn sẵn sàng giúp đỡ bạn bè cùng tiến bộ.">Học tập: Tiến bộ vượt bậc</option>
-                        <option value="Cán bộ lớp gương mẫu, nhiệt tình, có tinh thần trách nhiệm cao và hoàn thành xuất sắc nhiệm vụ.">Phong trào: Cán bộ xuất sắc</option>
-                        <option value="Bí thư năng nổ, dẫn dắt tập thể đạt nhiều thành tích và danh hiệu Chi đoàn vững mạnh.">Phong trào: Đoàn thanh niên</option>
-                        <option value="Ngôi sao thể thao của trường, mang về nhiều huy chương và khơi dậy tinh thần thể thao học đường.">Năng khiếu: Thể dục thể thao</option>
-                        <option value="Đạt giải thưởng cao trong kỳ thi Học sinh giỏi các cấp, mang lại niềm tự hào cho nhà trường.">Thi đua: Học sinh giỏi</option>
-                        <option value="Tuyên dương tinh thần 'Người tốt việc tốt', nhặt được của rơi trả lại người mất, lan tỏa nghĩa cử cao đẹp.">Đạo đức: Người tốt việc tốt</option>
-                        <!-- 10 GỢI Ý MỚI NGẮN GỌN (TỐI ĐA 2 DÒNG) -->
-                        <option value="Tự hào là tấm gương sáng về nghị lực vượt khó, luôn vươn lên đạt thành tích cao trong học tập.">Nghị lực: Vượt khó vươn lên</option>
-                        <option value="Đạt điểm tuyệt đối trong các kỳ thi, thể hiện tư duy nhạy bén và tinh thần ham học hỏi đáng quý.">Học tập: Điểm tuyệt đối</option>
-                        <option value="Thủ lĩnh thanh niên nhiệt huyết, truyền cảm hứng tích cực và gắn kết sức mạnh của toàn thể chi đoàn.">Phong trào: Thủ lĩnh truyền cảm hứng</option>
-                        <option value="Đóng góp xuất sắc vào các hoạt động thiện nguyện, lan tỏa tấm lòng nhân ái đến cộng đồng.">Hoạt động: Thiện nguyện/Cộng đồng</option>
-                        <option value="Tài năng nghệ thuật nổi bật, mang lại tiết mục ấn tượng và cống hiến hết mình cho phong trào.">Năng khiếu: Văn nghệ</option>
-                        <option value="Ghi nhận tinh thần đồng đội xuất sắc, luôn kề vai sát cánh cùng tập thể tiến lên phía trước.">Đoàn kết: Tinh thần đồng đội</option>
-                        <option value="Đạt giải cao trong kỳ thi Khoa học Kỹ thuật, khẳng định đam mê sáng tạo và tư duy đột phá.">Sáng tạo: Nghiên cứu Khoa học</option>
-                        <option value="Tuyên dương thành tích xuất sắc trong học tập ngoại ngữ, tự tự vươn ra hội nhập quốc tế.">Học tập: Ngoại ngữ xuất sắc</option>
-                        <option value="Lớp trưởng mẫu mực, tận tâm với lớp, là cầu nối vững chắc giữa thầy cô và tập thể học sinh.">Trách nhiệm: Lớp trưởng mẫu mực</option>
-                        <option value="Học sinh tiêu biểu toàn diện, dung hòa xuất sắc giữa thành tích học tập và hoạt động ngoại khóa.">Toàn diện: Học tập & Ngoại khóa</option>
-                    </select>
                 </div>
             </div> <!-- Kết thúc vùng menu ẩn -->
 
@@ -837,7 +1037,7 @@
                     <li><strong>Sửa chữ trực tiếp:</strong> Nhấn thẳng vào bất kỳ dòng chữ nào trên poster để thay đổi nội dung (Tên trường, Họ tên...).</li>
                     <li><strong>Xuống dòng:</strong> Nếu câu tuyên dương quá dài, nhấn <kbd class="bg-blue-200 px-1 rounded text-xs font-mono">Enter</kbd> hoặc <kbd class="bg-blue-200 px-1 rounded text-xs font-mono">Shift+Enter</kbd> để ngắt dòng cho đẹp mắt.</li>
                     <li><strong>Mẹo làm ảnh tạp chí:</strong> Sử dụng ảnh chân dung học sinh đã được xóa phông (đuôi .png nền trong suốt), kết hợp với chế độ khung ảnh số 11 (Toàn cảnh), poster sẽ trông chuyên nghiệp như một trang bìa tạp chí!</li>
-                    <li><strong>Bố cục nghệ thuật:</strong> Kết hợp mục "Bố cục nghệ thuật" (số 4) với các tùy chọn Font Tên/Tuyên dương để ra vô vàn biến thể độc lạ.</li>
+                    <li><strong>Bố cục nghệ thuật:</strong> Kết hợp mục "Bố cục nghệ thuật" với các tùy chọn Vector để ra vô vàn biến thể độc lạ.</li>
                 </ul>
             </div>
         </aside>
@@ -987,13 +1187,24 @@
             posterContainer.setAttribute('data-image-mode', mode);
         }
 
-        // --- LOGIC ĐỔI BỐ CỤC CHỮ NGHỆ THUẬT (MỚI) ---
+        // --- LOGIC ĐỔI BỐ CỤC CHỮ NGHỆ THUẬT ---
         function changeTextLayout(styleIndex) {
             const layoutWrapper = document.getElementById('text-layout-wrapper');
             // Xóa layout cũ
             layoutWrapper.className = layoutWrapper.className.replace(/\blayout-\d+\b/g, '');
             // Thêm layout mới
             layoutWrapper.classList.add(`layout-${styleIndex}`);
+        }
+
+        // --- LOGIC ĐỔI VECTOR TRANG TRÍ (MỚI) ---
+        function changeVectorStyle(styleIndex) {
+            const overlay = document.getElementById('vector-overlay');
+            // Xóa style cũ và set lại class mặc định
+            overlay.className = 'absolute inset-0 pointer-events-none z-[5] transition-all duration-500';
+            
+            if (styleIndex !== "0") {
+                overlay.classList.add(`vec-${styleIndex}`);
+            }
         }
 
         // --- LOGIC ĐỔI PHONG CÁCH TÊN HỌC SINH ---
@@ -1017,6 +1228,33 @@
             if (text) {
                 const commendationEl = document.getElementById('commendation-text');
                 commendationEl.innerText = `"${text}"`;
+            }
+        }
+
+        // --- LOGIC CHỨC NĂNG THÔNG MINH (NGẪU NHIÊN) ---
+        function randomizeDesign() {
+            // Danh sách màu text tương ứng với 24 Mẫu nền (để đảm bảo chữ luôn dễ đọc)
+            const themeColors = {
+                1: '#ffffff', 2: '#ffffff', 3: '#ffffff', 4: '#ffffff', 5: '#ffff00',
+                6: '#ffffff', 7: '#ffffff', 8: '#ffffff', 9: '#ffffff', 10: '#1f2937',
+                11: '#ffffff', 12: '#d4af37', 13: '#1e3a8a', 14: '#1f2937', 15: '#1e40af',
+                16: '#ffffff', 17: '#34d399', 18: '#db2777', 19: '#ffffff', 20: '#ffffff',
+                21: '#ffffff', 22: '#eaddcf', 23: '#1e3a8a', 24: '#ffffff'
+            };
+            
+            // Random Mẫu giao diện (từ 1 đến 24)
+            const randomTheme = Math.floor(Math.random() * 24) + 1;
+            // Random Bố cục nghệ thuật (từ 1 đến 20)
+            const randomLayout = Math.floor(Math.random() * 20) + 1;
+
+            // Áp dụng ngẫu nhiên
+            changeTemplate(randomTheme, themeColors[randomTheme]);
+            changeTextLayout(randomLayout);
+
+            // Đồng bộ cập nhật lại menu dropdown Bố cục
+            const layoutSelect = document.getElementById('text-layout-select');
+            if(layoutSelect) {
+                layoutSelect.value = randomLayout;
             }
         }
 
