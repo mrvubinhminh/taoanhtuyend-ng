@@ -131,6 +131,7 @@
             border: 8px solid var(--text-color);
             background-color: #e2e8f0;
             position: relative;
+            z-index: 10;
         }
         .photo-frame img {
             width: 100%;
@@ -226,6 +227,31 @@
         [data-image-mode="11"] .photo-frame img { width: 100%; height: auto; object-fit: unset; display: block; }
         [data-image-mode="11"] .photo-frame::after { height: 50%; background: linear-gradient(to bottom, transparent, var(--bg-color-end)); }
         [data-image-mode="11"] .photo-frame-wrapper + div { margin-top: 750px; }
+
+        /* --- 4 KIỂU MỚI: VÒNG NGUYỆT QUẾ LẤP LÁNH (CHẾ ĐỘ 12, 13, 14, 15) --- */
+        
+        .wreath-decor { display: none; } /* Mặc định ẩn vòng nguyệt quế */
+
+        /* 12. Vòng nguyệt quế Vàng (Gold Laurel) */
+        [data-image-mode="12"] .photo-frame-wrapper { width: 550px; height: 550px; border-radius: 50%; box-shadow: 0 0 80px rgba(251, 191, 36, 0.6); background: rgba(251, 191, 36, 0.1); }
+        [data-image-mode="12"] .photo-frame { border: 8px solid #FCD34D; border-radius: 50%; }
+        [data-image-mode="12"] .wreath-decor { display: flex; color: #FBBF24; } /* Màu vàng Tailwind */
+
+        /* 13. Vòng nguyệt quế Bạc (Silver Laurel) */
+        [data-image-mode="13"] .photo-frame-wrapper { width: 550px; height: 550px; border-radius: 50%; box-shadow: 0 0 80px rgba(209, 213, 219, 0.6); background: rgba(209, 213, 219, 0.1); }
+        [data-image-mode="13"] .photo-frame { border: 8px solid #E5E7EB; border-radius: 50%; }
+        [data-image-mode="13"] .wreath-decor { display: flex; color: #E5E7EB; } /* Màu Bạc */
+
+        /* 14. Vòng nguyệt quế Kim cương (Diamond Glow) */
+        [data-image-mode="14"] .photo-frame-wrapper { width: 550px; height: 550px; border-radius: 50%; box-shadow: 0 0 100px rgba(34, 211, 238, 0.8); background: rgba(34, 211, 238, 0.15); }
+        [data-image-mode="14"] .photo-frame { border: 8px solid #67E8F9; border-radius: 50%; }
+        [data-image-mode="14"] .wreath-decor { display: flex; color: #22D3EE; } /* Màu Xanh pha lê */
+
+        /* 15. Vòng nguyệt quế Hoa hồng (Rose Gold Laurel) */
+        [data-image-mode="15"] .photo-frame-wrapper { width: 550px; height: 550px; border-radius: 50%; box-shadow: 0 0 80px rgba(244, 114, 182, 0.6); background: rgba(244, 114, 182, 0.1); }
+        [data-image-mode="15"] .photo-frame { border: 8px solid #F9A8D4; border-radius: 50%; }
+        [data-image-mode="15"] .wreath-decor { display: flex; color: #F472B6; } /* Màu hồng dịu */
+
 
         /* Đảm bảo text luôn nổi lên trên khi dùng mode ảnh tràn viền */
         .text-block { position: relative; z-index: 10; }
@@ -445,6 +471,55 @@
                                     <div class="photo-frame">
                                         <img id="student-photo" src="https://images.unsplash.com/photo-1597848212624-a19eb35e2651?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Ảnh học sinh">
                                     </div>
+                                    
+                                    <!-- VÒNG NGUYỆT QUẾ TRANG TRÍ (Hiển thị ở Mode 12, 13, 14, 15) -->
+                                    <div class="wreath-decor absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] pointer-events-none z-20 items-center justify-center">
+                                        <svg viewBox="0 0 400 400" class="w-full h-full drop-shadow-xl" fill="none" stroke="currentColor">
+                                            <!-- Vòng nguyệt quế bên Trái -->
+                                            <path d="M 200 370 A 150 150 0 0 1 50 200 A 150 150 0 0 1 180 55" stroke-width="4"/>
+                                            <g fill="currentColor" stroke="none">
+                                                <path d="M 50 200 C 20 180, 20 140, 60 150 C 70 180, 60 200, 50 200" />
+                                                <path d="M 65 140 C 35 110, 45 70, 80 90 C 90 120, 75 140, 65 140" />
+                                                <path d="M 100 85 C 80 50, 100 20, 135 45 C 140 70, 115 85, 100 85" />
+                                                <path d="M 160 50 C 140 15, 170 -5, 195 20 C 190 45, 170 55, 160 50" />
+                                                <path d="M 65 260 C 35 250, 25 210, 60 205 C 80 220, 80 245, 65 260" />
+                                                <path d="M 105 315 C 75 315, 65 275, 95 260 C 120 275, 120 305, 105 315" />
+                                                <path d="M 160 360 C 130 370, 115 335, 140 315 C 165 330, 175 350, 160 360" />
+                                            </g>
+                                            
+                                            <!-- Vòng nguyệt quế bên Phải (Lật ngược) -->
+                                            <g transform="translate(400, 0) scale(-1, 1)">
+                                                <path d="M 200 370 A 150 150 0 0 1 50 200 A 150 150 0 0 1 180 55" stroke-width="4"/>
+                                                <g fill="currentColor" stroke="none">
+                                                    <path d="M 50 200 C 20 180, 20 140, 60 150 C 70 180, 60 200, 50 200" />
+                                                    <path d="M 65 140 C 35 110, 45 70, 80 90 C 90 120, 75 140, 65 140" />
+                                                    <path d="M 100 85 C 80 50, 100 20, 135 45 C 140 70, 115 85, 100 85" />
+                                                    <path d="M 160 50 C 140 15, 170 -5, 195 20 C 190 45, 170 55, 160 50" />
+                                                    <path d="M 65 260 C 35 250, 25 210, 60 205 C 80 220, 80 245, 65 260" />
+                                                    <path d="M 105 315 C 75 315, 65 275, 95 260 C 120 275, 120 305, 105 315" />
+                                                    <path d="M 160 360 C 130 370, 115 335, 140 315 C 165 330, 175 350, 160 360" />
+                                                </g>
+                                            </g>
+
+                                            <!-- Các ngôi sao lấp lánh (Sparkles) -->
+                                            <g fill="#FFFFFF" stroke="none">
+                                                <!-- Top Center -->
+                                                <path d="M200 5 L203 25 L220 28 L203 31 L200 50 L197 31 L180 28 L197 25 Z" />
+                                                <!-- Top Left -->
+                                                <path d="M80 60 L82 75 L95 77 L82 79 L80 90 L78 79 L65 77 L78 75 Z" />
+                                                <!-- Top Right -->
+                                                <path d="M320 60 L322 75 L335 77 L322 79 L320 90 L318 79 L305 77 L318 75 Z" />
+                                                <!-- Center Left -->
+                                                <path d="M20 180 L22 190 L35 192 L22 194 L20 205 L18 194 L5 192 L18 190 Z" />
+                                                <!-- Center Right -->
+                                                <path d="M380 180 L382 190 L395 192 L382 194 L380 205 L378 194 L365 192 L378 190 Z" />
+                                                <!-- Bottom Left -->
+                                                <path d="M50 280 L53 295 L70 298 L53 301 L50 315 L47 301 L30 298 L47 295 Z" />
+                                                <!-- Bottom Right -->
+                                                <path d="M350 280 L353 295 L370 298 L353 301 L350 315 L347 301 L330 298 L347 295 Z" />
+                                            </g>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
 
@@ -530,17 +605,27 @@
                 <div class="mb-6">
                     <label class="block text-sm font-semibold text-gray-700 mb-2">2. Chọn kiểu khung ảnh</label>
                     <select id="mode-select" onchange="changeImageMode(this.value)" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5">
-                        <option value="1">Tròn tiêu chuẩn (Vừa)</option>
-                        <option value="2">Tròn lớn (Nổi bật)</option>
-                        <option value="3">Bầu dục dọc (Chân dung)</option>
-                        <option value="4">Vuông bo góc (Hiện đại)</option>
-                        <option value="5">Chữ nhật đứng (Postcard)</option>
-                        <option value="6">Vòm cổng (Classic Arch)</option>
-                        <option value="7">Hình thoi (Diamond)</option>
-                        <option value="8">Lục giác (Hexagon)</option>
-                        <option value="9">Phủ 1/2 màn hình trên (Bìa tạp chí)</option>
-                        <option value="10">Phủ 2/3 màn hình trên (Điện ảnh)</option>
-                        <option value="11" selected>Phủ 3/4 màn hình (Toàn cảnh)</option>
+                        <optgroup label="Khung ảnh cơ bản">
+                            <option value="1">Tròn tiêu chuẩn (Vừa)</option>
+                            <option value="2">Tròn lớn (Nổi bật)</option>
+                            <option value="3">Bầu dục dọc (Chân dung)</option>
+                            <option value="4">Vuông bo góc (Hiện đại)</option>
+                            <option value="5">Chữ nhật đứng (Postcard)</option>
+                            <option value="6">Vòm cổng (Classic Arch)</option>
+                            <option value="7">Hình thoi (Diamond)</option>
+                            <option value="8">Lục giác (Hexagon)</option>
+                        </optgroup>
+                        <optgroup label="Chế độ Tràn viền (Tạp chí)">
+                            <option value="9">Phủ 1/2 màn hình trên</option>
+                            <option value="10">Phủ 2/3 màn hình trên</option>
+                            <option value="11" selected>Phủ 3/4 màn hình (Toàn cảnh)</option>
+                        </optgroup>
+                        <optgroup label="Giấy Khen Vinh Danh (Mới)">
+                            <option value="12">🏆 Vòng Nguyệt Quế Vàng (Lấp lánh)</option>
+                            <option value="13">🥈 Vòng Nguyệt Quế Bạc (Lấp lánh)</option>
+                            <option value="14">💎 Vòng Nguyệt Quế Kim Cương (Phát sáng)</option>
+                            <option value="15">🌸 Vòng Nguyệt Quế Hoa Hồng (Độc đáo)</option>
+                        </optgroup>
                     </select>
                 </div>
 
