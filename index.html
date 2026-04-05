@@ -8,12 +8,12 @@
     <!-- Tailwind CSS cho Giao diện UI -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts cho Poster -->
+    <!-- Google Fonts cho Poster (Đã bổ sung thêm bộ font Tiếng Việt chuẩn) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Be+Vietnam+Pro:ital,wght@0,400;0,700;0,900;1,400&family=Charm:wght@400;700&family=Comfortaa:wght@400;700&family=Jura:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Oswald:wght@400;700&family=Pattaya&family=Prata&family=Sriracha&family=Yeseva+One&display=swap" rel="stylesheet">
     
-    <!-- Import thêm các Font chữ nghệ thuật mới -->
+    <!-- Import thêm các Font chữ nghệ thuật cũ -->
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@700;900&family=Dancing+Script:wght@700&family=Pacifico&family=Righteous&display=swap" rel="stylesheet">
 
     <!-- html2canvas library để xuất ảnh -->
@@ -109,6 +109,7 @@
             align-items: center;
             justify-content: flex-end;
             flex-shrink: 0; /* Ép không cho thay đổi kích thước khi render */
+            transition: all 0.5s ease;
         }
 
         /* KHUNG ẢNH */
@@ -294,6 +295,75 @@
         .title-style-10 h2 { font-family: 'Pacifico', cursive; font-weight: normal; }
 
 
+        /* --- MỚI: 10 BỐ CỤC CHỮ NGHỆ THUẬT (LAYOUTS) --- */
+        /* Sử dụng Font Tiếng Việt chuẩn */
+        
+        /* 1. Chuẩn mực (Mặc định) */
+        .layout-1 { align-items: center; text-align: center; font-family: 'Montserrat', sans-serif; }
+        .layout-1 #student-name-container { flex-direction: row; }
+        
+        /* 2. Tạp chí Thời trang (Căn trái, Lora + Oswald) */
+        .layout-2 { align-items: flex-start; text-align: left; padding-left: 80px; font-family: 'Lora', serif; }
+        .layout-2 #commendation-title { text-align: left; font-family: 'Oswald', sans-serif; border-left: 6px solid var(--text-color); padding-left: 20px; }
+        .layout-2 #student-name-container { flex-direction: row; justify-content: flex-start; }
+        .layout-2 #commendation-text { margin-left: 0; font-family: 'Lora', serif; font-size: 1.6rem; }
+        .layout-2 #school-name { text-align: left; align-self: flex-start; }
+
+        /* 3. Điện ảnh (Căn phải, chữ mảnh, Jura) */
+        .layout-3 { align-items: flex-end; text-align: right; padding-right: 80px; font-family: 'Jura', sans-serif; }
+        .layout-3 #commendation-title { text-align: right; border-right: 6px solid var(--text-color); padding-right: 20px; }
+        .layout-3 #student-name-container { flex-direction: row-reverse; justify-content: flex-start; }
+        .layout-3 #commendation-text { margin-right: 0; text-align: right; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 300; }
+        .layout-3 #school-name { text-align: right; align-self: flex-end; }
+
+        /* 4. Cổ điển Á Đông (Căn giữa, Prata, Khoảng cách hẹp) */
+        .layout-4 { align-items: center; text-align: center; font-family: 'Prata', serif; }
+        .layout-4 #commendation-title h2 { letter-spacing: 8px; font-weight: normal; }
+        .layout-4 #student-name-container { flex-direction: column; gap: 20px; }
+        .layout-4 #commendation-text { font-style: normal; border-top: 1px solid rgba(255,255,255,0.5); border-bottom: 1px solid rgba(255,255,255,0.5); padding: 20px 0; }
+
+        /* 5. Tự do Thơ ca (Pattaya, Bố cục lệch) */
+        .layout-5 { align-items: center; text-align: center; }
+        .layout-5 #commendation-title h2:first-child { font-family: 'Pattaya', sans-serif; font-size: 5rem; text-transform: capitalize; transform: rotate(-5deg); margin-bottom: -20px; z-index: 2; position: relative; }
+        .layout-5 #student-name { font-family: 'Pattaya', sans-serif; text-transform: capitalize; font-size: 6rem; }
+        .layout-5 #commendation-text { font-family: 'Be Vietnam Pro', sans-serif; }
+
+        /* 6. Tối giản Hiện đại (Be Vietnam Pro, Không Shadow) */
+        .layout-6 { align-items: center; text-align: center; font-family: 'Be Vietnam Pro', sans-serif; }
+        .layout-6 .text-shadow, .layout-6 .text-shadow-heavy { text-shadow: none !important; }
+        .layout-6 #commendation-title h2 { font-weight: 900; letter-spacing: -1px; }
+        .layout-6 #student-name { font-weight: 900; letter-spacing: -2px; }
+        .layout-6 #commendation-text { font-weight: 400; font-size: 1.3rem; max-width: 600px; opacity: 0.8; }
+
+        /* 7. Nàng Thơ (Charm, Mềm mại, Căn trái) */
+        .layout-7 { align-items: flex-start; text-align: left; padding-left: 80px; }
+        .layout-7 #commendation-title h2 { font-family: 'Charm', cursive; text-transform: none; font-size: 4rem; }
+        .layout-7 #student-name { font-family: 'Charm', cursive; text-transform: none; font-size: 7rem; }
+        .layout-7 #student-name-container { flex-direction: row; justify-content: flex-start; }
+        .layout-7 #commendation-text { margin-left: 0; font-family: 'Lora', serif; font-style: italic; font-size: 1.5rem; }
+        .layout-7 #school-name { text-align: left; align-self: flex-start; }
+
+        /* 8. Khối Kiến trúc (Oswald, Ép vuông vức) */
+        .layout-8 { align-items: stretch; text-align: justify; font-family: 'Oswald', sans-serif; padding: 0 60px; }
+        .layout-8 #commendation-title h2 { font-family: 'Oswald', sans-serif; text-align: center; letter-spacing: 5px; }
+        .layout-8 #student-name-container { flex-direction: row; justify-content: space-between; border-bottom: 4px solid var(--text-color); padding-bottom: 20px; }
+        .layout-8 #student-name { text-align: left; }
+        .layout-8 #commendation-text { text-align: justify; font-family: 'Be Vietnam Pro', sans-serif; font-size: 1.3rem; margin-top: 20px; }
+
+        /* 9. Thân thiện Khối Tròn (Comfortaa, Rộng rãi) */
+        .layout-9 { align-items: center; text-align: center; font-family: 'Comfortaa', cursive; }
+        .layout-9 #commendation-title h2 { font-family: 'Comfortaa', cursive; font-weight: 700; }
+        .layout-9 #student-name { font-family: 'Comfortaa', cursive; font-weight: 700; font-size: 4rem; }
+        .layout-9 #student-name-container { flex-direction: column; gap: 15px; }
+        .layout-9 #commendation-text { font-family: 'Comfortaa', cursive; font-size: 1.4rem; line-height: 1.8; }
+
+        /* 10. Nghệ thuật Retro (Yeseva One + Sriracha) */
+        .layout-10 { align-items: center; text-align: center; }
+        .layout-10 #commendation-title h2 { font-family: 'Yeseva One', serif; font-size: 3.5rem; letter-spacing: 2px; }
+        .layout-10 #student-name { font-family: 'Yeseva One', serif; }
+        .layout-10 #commendation-text { font-family: 'Sriracha', cursive; font-size: 1.8rem; transform: rotate(-2deg); background: rgba(0,0,0,0.2); padding: 15px 30px; border-radius: 15px; }
+
+
         /* CÁC TEMPLATE (MẪU) - Bổ sung biến --bg-color-end để trộn màu fade đuôi ảnh */
         
         /* 1. Hoa Hướng Dương */
@@ -438,10 +508,9 @@
         </div>
     </header>
 
-    <!-- Sửa thẻ flex-col để đảm bảo thứ tự trên Mobile -->
     <main class="max-w-7xl mx-auto p-4 lg:p-6 flex flex-col lg:flex-row lg:gap-8 items-start">
         
-        <!-- CANVAS PREVIEW (VÙNG HIỂN THỊ POSTER) - BẢN TRÊN ĐIỆN THOẠI SẼ HIỆN ĐẦU TIÊN -->
+        <!-- CANVAS PREVIEW (VÙNG HIỂN THỊ POSTER) -->
         <section class="w-full lg:w-2/3 flex flex-col items-center order-1 lg:order-2 mb-8 lg:mb-0">
             <div id="poster-viewport" class="shadow-2xl border-4 border-white">
                 <div id="poster-scaler">
@@ -457,9 +526,8 @@
                             
                             <!-- TOP SECTION: Chứa tên trường ở trên cùng -->
                             <div class="top-section text-block">
-                                <!-- Header: Trường -->
                                 <div class="w-full flex flex-col items-center">
-                                    <h3 contenteditable="true" spellcheck="false" class="text-3xl font-bold tracking-widest uppercase opacity-100 text-shadow-heavy m-0">
+                                    <h3 id="school-name" contenteditable="true" spellcheck="false" class="text-3xl font-bold tracking-widest uppercase opacity-100 text-shadow-heavy m-0">
                                         TRƯỜNG THPT NGUYỄN HỮU CẢNH
                                     </h3>
                                 </div>
@@ -523,11 +591,11 @@
                                 </div>
                             </div>
 
-                            <!-- BOTTOM SECTION: Chứa các thông tin còn lại ở dưới -->
-                            <div class="bottom-section text-block">
+                            <!-- BOTTOM SECTION: Chứa các thông tin còn lại ở dưới (ID wrapper để áp dụng Layout) -->
+                            <div id="text-layout-wrapper" class="bottom-section text-block layout-1">
                                 
                                 <!-- Title: Chữ tuyên dương được chuyển xuống đây -->
-                                <div id="commendation-title" class="text-center mb-4 title-style-1">
+                                <div id="commendation-title" class="mb-4 title-style-1 w-full">
                                     <h2 contenteditable="true" spellcheck="false" class="text-[40px] font-black uppercase tracking-tight text-shadow-heavy leading-tight mb-2">
                                         TUYÊN DƯƠNG
                                     </h2>
@@ -537,7 +605,7 @@
                                 </div>
 
                                 <!-- Cụm Tên và Lớp: Được khóa cứng flex-nowrap để tránh nhảy dòng -->
-                                <div class="flex flex-row items-center justify-center gap-8 mb-6 w-full" style="flex-wrap: nowrap;">
+                                <div id="student-name-container" class="flex items-center justify-center gap-8 mb-6 w-full" style="flex-wrap: nowrap;">
                                     <h1 id="student-name" contenteditable="true" spellcheck="false" class="text-[64px] font-black uppercase tracking-tighter text-shadow-heavy name-style-1 flex-shrink-0 leading-none">
                                         NGUYỄN VĂN A
                                     </h1>
@@ -557,7 +625,7 @@
                                         </h4>
                                     </div>
                                 </div>
-                                <p id="commendation-text" contenteditable="true" spellcheck="false" class="text-2xl font-medium italic opacity-90 text-shadow max-w-3xl mx-auto leading-relaxed">
+                                <p id="commendation-text" contenteditable="true" spellcheck="false" class="text-2xl font-medium italic opacity-90 text-shadow max-w-3xl leading-relaxed">
                                     "Vì những thành tích xuất sắc, nỗ lực không ngừng trong học tập và phong trào thi đua của lớp."
                                 </p>
                             </div>
@@ -638,10 +706,27 @@
                     </div>
                 </div>
 
+                <!-- MỚI: CHỌN BỐ CỤC CHỮ NGHỆ THUẬT -->
+                <div class="mb-6">
+                    <label class="block text-sm font-bold text-indigo-700 mb-2">✦ Bố cục chữ nghệ thuật (Tổng thể)</label>
+                    <select id="text-layout-select" onchange="changeTextLayout(this.value)" class="w-full bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-medium shadow-sm">
+                        <option value="1">✨ Chuẩn mực (Mặc định)</option>
+                        <option value="2">📰 Tạp chí Thời trang (Căn trái, Lora & Oswald)</option>
+                        <option value="3">🎬 Điện ảnh (Căn phải, Jura Tech)</option>
+                        <option value="4">🏛️ Cổ điển Á Đông (Prata, Khoảng cách hẹp)</option>
+                        <option value="5">🖋️ Tự do Thơ ca (Pattaya, Bố cục lệch)</option>
+                        <option value="6">⬜ Tối giản Hiện đại (Be Vietnam Pro, Sạch sẽ)</option>
+                        <option value="7">🌸 Nàng thơ (Charm, Mềm mại, Căn trái)</option>
+                        <option value="8">🏗️ Khối Kiến trúc (Oswald, Ép vuông vức)</option>
+                        <option value="9">😊 Thân thiện & Tròn trịa (Comfortaa)</option>
+                        <option value="10">📻 Retro Nghệ thuật (Yeseva One & Sriracha)</option>
+                    </select>
+                </div>
+
                 <!-- CHỌN PHONG CÁCH CHỮ TÊN HỌC SINH -->
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">4. Phong cách Tên học sinh</label>
-                    <select id="font-style-select" onchange="changeNameStyle(this.value)" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-medium">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">▶ Phong cách Tên học sinh</label>
+                    <select id="font-style-select" onchange="changeNameStyle(this.value)" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5">
                         <option value="1">✨ Sang trọng & Cổ điển (Mặc định)</option>
                         <option value="2">🏛️ Cổ điển Hoàng Gia (Cinzel)</option>
                         <option value="3">🖋️ Thư pháp tinh tế (Dancing Script)</option>
@@ -657,8 +742,8 @@
 
                 <!-- CHỌN PHONG CÁCH CHỮ TUYÊN DƯƠNG -->
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">5. Phong cách chữ Tuyên dương</label>
-                    <select id="title-style-select" onchange="changeTitleStyle(this.value)" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-medium">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">▶ Phong cách chữ Tuyên dương</label>
+                    <select id="title-style-select" onchange="changeTitleStyle(this.value)" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5">
                         <option value="1">✨ Mặc định (Hiện đại)</option>
                         <option value="2">🏛️ Cổ điển (Cinzel)</option>
                         <option value="3">🧱 Khối To bản (Bebas)</option>
@@ -752,7 +837,7 @@
                     <li><strong>Sửa chữ trực tiếp:</strong> Nhấn thẳng vào bất kỳ dòng chữ nào trên poster để thay đổi nội dung (Tên trường, Họ tên...).</li>
                     <li><strong>Xuống dòng:</strong> Nếu câu tuyên dương quá dài, nhấn <kbd class="bg-blue-200 px-1 rounded text-xs font-mono">Enter</kbd> hoặc <kbd class="bg-blue-200 px-1 rounded text-xs font-mono">Shift+Enter</kbd> để ngắt dòng cho đẹp mắt.</li>
                     <li><strong>Mẹo làm ảnh tạp chí:</strong> Sử dụng ảnh chân dung học sinh đã được xóa phông (đuôi .png nền trong suốt), kết hợp với chế độ khung ảnh số 11 (Toàn cảnh), poster sẽ trông chuyên nghiệp như một trang bìa tạp chí!</li>
-                    <li><strong>Độ tương phản:</strong> Hãy nhớ đổi màu chữ sang tone tối (Đen/Xanh đậm) nếu bạn đang chọn các Mẫu nền sáng (như mẫu Tinh khôi).</li>
+                    <li><strong>Bố cục nghệ thuật:</strong> Kết hợp mục "Bố cục nghệ thuật" (số 4) với các tùy chọn Font Tên/Tuyên dương để ra vô vàn biến thể độc lạ.</li>
                 </ul>
             </div>
         </aside>
@@ -900,6 +985,15 @@
         // --- LOGIC CHỌN KIỂU KHUNG ẢNH ---
         function changeImageMode(mode) {
             posterContainer.setAttribute('data-image-mode', mode);
+        }
+
+        // --- LOGIC ĐỔI BỐ CỤC CHỮ NGHỆ THUẬT (MỚI) ---
+        function changeTextLayout(styleIndex) {
+            const layoutWrapper = document.getElementById('text-layout-wrapper');
+            // Xóa layout cũ
+            layoutWrapper.className = layoutWrapper.className.replace(/\blayout-\d+\b/g, '');
+            // Thêm layout mới
+            layoutWrapper.classList.add(`layout-${styleIndex}`);
         }
 
         // --- LOGIC ĐỔI PHONG CÁCH TÊN HỌC SINH ---
