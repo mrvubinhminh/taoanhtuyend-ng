@@ -136,7 +136,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center;
+            object-position: top center; /* Ưu tiên giữ khuôn mặt không bị lẹm */
         }
 
         /* KHẮC PHỤC LỖI XUẤT ẢNH: LỚP PHỦ MỜ (FADE OVERLAY) CHO CHẾ ĐỘ 9, 10, 11 */
@@ -195,30 +195,35 @@
         [data-image-mode="8"] .photo-frame-wrapper { width: 700px; height: 700px; border-radius: 0; background: var(--text-color); padding: 12px; clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
         [data-image-mode="8"] .photo-frame { border-radius: 0; border: none; clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
 
-        /* 9. Chiếm 1/2 màn hình (Nửa trên) - Sửa thuật toán làm mờ để tương thích html2canvas */
+        /* --- SỬA THUẬT TOÁN ẢNH CỦA CHẾ ĐỘ 9, 10, 11 (Lấy đúng chiều rộng, không tự scale méo ảnh) --- */
+        
+        /* 9. Chiếm tối đa 1/2 màn hình trên */
         [data-image-mode="9"] .photo-frame-wrapper { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 55%; margin: 0; padding: 0; 
+            position: absolute; top: 0; left: 0; width: 100%; height: auto; max-height: 55%; margin: 0; padding: 0; 
             border-radius: 0; background: transparent; z-index: 1; box-shadow: none; border: none; 
         }
-        [data-image-mode="9"] .photo-frame { border: none; border-radius: 0; }
+        [data-image-mode="9"] .photo-frame { border: none; border-radius: 0; background-color: transparent; height: 100%; display: block; }
+        [data-image-mode="9"] .photo-frame img { width: 100%; height: auto; object-fit: unset; display: block; }
         [data-image-mode="9"] .photo-frame::after { height: 40%; background: linear-gradient(to bottom, transparent, var(--bg-color-end)); }
         [data-image-mode="9"] .photo-frame-wrapper + div { margin-top: 350px; }
 
-        /* 10. Chiếm 2/3 màn hình (Nửa trên) */
+        /* 10. Chiếm tối đa 2/3 màn hình trên */
         [data-image-mode="10"] .photo-frame-wrapper { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 70%; margin: 0; padding: 0; 
+            position: absolute; top: 0; left: 0; width: 100%; height: auto; max-height: 70%; margin: 0; padding: 0; 
             border-radius: 0; background: transparent; z-index: 1; box-shadow: none; border: none; 
         }
-        [data-image-mode="10"] .photo-frame { border: none; border-radius: 0; }
+        [data-image-mode="10"] .photo-frame { border: none; border-radius: 0; background-color: transparent; height: 100%; display: block; }
+        [data-image-mode="10"] .photo-frame img { width: 100%; height: auto; object-fit: unset; display: block; }
         [data-image-mode="10"] .photo-frame::after { height: 45%; background: linear-gradient(to bottom, transparent, var(--bg-color-end)); }
         [data-image-mode="10"] .photo-frame-wrapper + div { margin-top: 550px; }
 
-        /* 11. Chiếm 3/4 màn hình (Toàn cảnh) */
+        /* 11. Chiếm tối đa 3/4 màn hình trên (Toàn cảnh) */
         [data-image-mode="11"] .photo-frame-wrapper { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 85%; margin: 0; padding: 0; 
+            position: absolute; top: 0; left: 0; width: 100%; height: auto; max-height: 85%; margin: 0; padding: 0; 
             border-radius: 0; background: transparent; z-index: 1; box-shadow: none; border: none; 
         }
-        [data-image-mode="11"] .photo-frame { border: none; border-radius: 0; }
+        [data-image-mode="11"] .photo-frame { border: none; border-radius: 0; background-color: transparent; height: 100%; display: block; }
+        [data-image-mode="11"] .photo-frame img { width: 100%; height: auto; object-fit: unset; display: block; }
         [data-image-mode="11"] .photo-frame::after { height: 50%; background: linear-gradient(to bottom, transparent, var(--bg-color-end)); }
         [data-image-mode="11"] .photo-frame-wrapper + div { margin-top: 750px; }
 
