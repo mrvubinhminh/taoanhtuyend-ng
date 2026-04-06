@@ -33,9 +33,69 @@
             overflow: hidden;
             font-family: 'Montserrat', sans-serif;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transition: background 0.5s ease;
+            transition: all 0.5s ease;
             color: var(--text-color);
         }
+
+        /* --- ĐIỀU CHỈNH CHẾ ĐỘ NGANG (LANDSCAPE) SỬA LỖI HTML2CANVAS & TRÀN CHỮ --- */
+        [data-orientation="landscape"] .bottom-section { 
+            bottom: 40px; 
+            padding: 0 80px; 
+            box-sizing: border-box;
+            width: 100%;
+        }
+        [data-orientation="landscape"] .top-section { 
+            top: 60px; 
+            padding: 0 80px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        
+        /* Cập nhật font-size và giới hạn chiều rộng thật cho chữ để tránh tràn */
+        [data-orientation="landscape"] #school-name { font-size: 2.2rem !important; line-height: 1.2; word-wrap: break-word; max-width: 100%; }
+        [data-orientation="landscape"] #commendation-title h2:nth-child(1) { font-size: 54px !important; word-wrap: break-word; max-width: 100%; }
+        [data-orientation="landscape"] #commendation-title h2:nth-child(2) { font-size: 40px !important; word-wrap: break-word; max-width: 100%; }
+        [data-orientation="landscape"] #student-name { font-size: 80px !important; white-space: normal; word-wrap: break-word; max-width: 100%; line-height: 1.1; }
+        [data-orientation="landscape"] #commendation-text { font-size: 28px !important; max-width: 1400px !important; white-space: normal; word-wrap: break-word; margin-left: auto; margin-right: auto; }
+        
+        /* Cập nhật kích thước Huy hiệu lớp */
+        [data-orientation="landscape"] #class-badge { width: 140px !important; height: 140px !important; border-width: 4px !important; margin-left: 20px; }
+        [data-orientation="landscape"] #class-badge svg { width: 40px; height: 40px; }
+        [data-orientation="landscape"] #class-badge h4 { font-size: 36px !important; }
+        
+        /* Cập nhật Khung Ảnh Cơ bản cho chiều ngang */
+        [data-orientation="landscape"][data-image-mode="1"] .photo-frame-wrapper,
+        [data-orientation="landscape"][data-image-mode="3"] .photo-frame-wrapper,
+        [data-orientation="landscape"][data-image-mode="4"] .photo-frame-wrapper,
+        [data-orientation="landscape"][data-image-mode="6"] .photo-frame-wrapper,
+        [data-orientation="landscape"][data-image-mode="7"] .photo-frame-wrapper { width: 700px; height: 700px; }
+        
+        [data-orientation="landscape"][data-image-mode="2"] .photo-frame-wrapper { width: 850px; height: 850px; }
+        [data-orientation="landscape"][data-image-mode="5"] .photo-frame-wrapper { width: 750px; height: 850px; }
+        [data-orientation="landscape"][data-image-mode="8"] .photo-frame-wrapper { width: 750px; height: 750px; }
+        
+        [data-orientation="landscape"][data-image-mode="12"] .photo-frame-wrapper,
+        [data-orientation="landscape"][data-image-mode="13"] .photo-frame-wrapper,
+        [data-orientation="landscape"][data-image-mode="14"] .photo-frame-wrapper,
+        [data-orientation="landscape"][data-image-mode="15"] .photo-frame-wrapper { width: 700px; height: 700px; }
+
+        /* Chỉnh lại gradient mờ đuôi ảnh cho chế độ tràn viền ở Khổ Ngang */
+        [data-orientation="landscape"][data-image-mode="9"] .photo-frame::after,
+        [data-orientation="landscape"][data-image-mode="10"] .photo-frame::after,
+        [data-orientation="landscape"][data-image-mode="11"] .photo-frame::after {
+            height: 65%;
+            background: linear-gradient(to bottom, transparent 30%, var(--bg-color-end));
+        }
+
+        /* Sửa lỗi font chữ cho các Bố cục Layout nghệ thuật ở Khổ Ngang */
+        [data-orientation="landscape"] .layout-18 #student-name { font-size: 7rem !important; }
+        [data-orientation="landscape"] .layout-13 #commendation-title h2 { font-size: 5rem !important; }
+        [data-orientation="landscape"] .layout-13 #student-name { font-size: 8rem !important; }
+        [data-orientation="landscape"] .layout-7 #student-name { font-size: 8rem !important; }
+        [data-orientation="landscape"] .layout-5 #student-name { font-size: 7rem !important; }
+        [data-orientation="landscape"] .layout-5 #commendation-title h2:first-child { font-size: 5.5rem !important; }
+        /* ---------------------------------------------------------------------- */
+
 
         /* Ẩn outline khi click vào text để sửa */
         [contenteditable="true"] {
@@ -68,61 +128,23 @@
             transition: all 0.5s ease;
         }
 
-        /* --- MỚI: LỚP OVERLAY CHỨA VECTOR TRANG TRÍ --- */
+        /* LỚP OVERLAY CHỨA VECTOR TRANG TRÍ */
         #vector-overlay {
-            z-index: 5; /* Đặt dưới content-layer nhưng trên deco */
+            z-index: 5;
             pointer-events: none;
         }
 
-        /* 1. Hoa văn góc (Corner Brackets) */
-        .vec-1 { background: 
-            linear-gradient(to right, rgba(255,255,255,0.6) 4px, transparent 4px) 40px 40px,
-            linear-gradient(to bottom, rgba(255,255,255,0.6) 4px, transparent 4px) 40px 40px,
-            linear-gradient(to left, rgba(255,255,255,0.6) 4px, transparent 4px) calc(100% - 40px) 40px,
-            linear-gradient(to bottom, rgba(255,255,255,0.6) 4px, transparent 4px) calc(100% - 40px) 40px,
-            linear-gradient(to right, rgba(255,255,255,0.6) 4px, transparent 4px) 40px calc(100% - 40px),
-            linear-gradient(to top, rgba(255,255,255,0.6) 4px, transparent 4px) 40px calc(100% - 40px),
-            linear-gradient(to left, rgba(255,255,255,0.6) 4px, transparent 4px) calc(100% - 40px) calc(100% - 40px),
-            linear-gradient(to top, rgba(255,255,255,0.6) 4px, transparent 4px) calc(100% - 40px) calc(100% - 40px);
-            background-repeat: no-repeat; background-size: 100px 100px; }
-
-        /* 2. Khung viền mỏng đôi (Double Thin Frame) */
-        .vec-2::before { content: ''; position: absolute; inset: 40px; border: 1px solid rgba(255,255,255,0.8); }
-        .vec-2::after { content: ''; position: absolute; inset: 50px; border: 1px solid rgba(255,255,255,0.4); }
-
-        /* 3. Chấm bi lơ lửng (Floating Dots) */
+        /* VECTOR PATTERNS */
+        .vec-1 { background: linear-gradient(to right, rgba(255,255,255,0.6) 4px, transparent 4px) 40px 40px, linear-gradient(to bottom, rgba(255,255,255,0.6) 4px, transparent 4px) 40px 40px, linear-gradient(to left, rgba(255,255,255,0.6) 4px, transparent 4px) calc(100% - 40px) 40px, linear-gradient(to bottom, rgba(255,255,255,0.6) 4px, transparent 4px) calc(100% - 40px) 40px, linear-gradient(to right, rgba(255,255,255,0.6) 4px, transparent 4px) 40px calc(100% - 40px), linear-gradient(to top, rgba(255,255,255,0.6) 4px, transparent 4px) 40px calc(100% - 40px), linear-gradient(to left, rgba(255,255,255,0.6) 4px, transparent 4px) calc(100% - 40px) calc(100% - 40px), linear-gradient(to top, rgba(255,255,255,0.6) 4px, transparent 4px) calc(100% - 40px) calc(100% - 40px); background-repeat: no-repeat; background-size: 100px 100px; }
+        .vec-2::before { content: ''; position: absolute; inset: 40px; border: 1px solid rgba(255,255,255,0.8); } .vec-2::after { content: ''; position: absolute; inset: 50px; border: 1px solid rgba(255,255,255,0.4); }
         .vec-3 { background-image: radial-gradient(rgba(255,255,255,0.2) 2px, transparent 2px), radial-gradient(rgba(255,255,255,0.15) 3px, transparent 3px); background-size: 120px 120px, 180px 180px; background-position: 0 0, 60px 60px; }
-
-        /* 4. Tia sáng chéo (Diagonal Rays) */
         .vec-4 { background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 80px); }
-
-        /* 5. Lưới điểm Tech (Tech Plus Grid) */
         .vec-5 { background-image: linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px); background-size: 40px 40px; background-position: center center; mask-image: radial-gradient(circle, transparent 40%, black 100%); -webkit-mask-image: radial-gradient(circle, transparent 40%, black 100%);}
-
-        /* 6. Ruy băng góc mờ (Glass Ribbons) */
-        .vec-6::before, .vec-6::after { content: ''; position: absolute; width: 400px; height: 60px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-top: 1px solid rgba(255,255,255,0.3); border-bottom: 1px solid rgba(255,255,255,0.3); }
-        .vec-6::before { top: 60px; left: -100px; transform: rotate(-45deg); }
-        .vec-6::after { bottom: 60px; right: -100px; transform: rotate(-45deg); }
-
-        /* 7. Ngôi sao chìm (Subtle Stars) */
+        .vec-6::before, .vec-6::after { content: ''; position: absolute; width: 400px; height: 60px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-top: 1px solid rgba(255,255,255,0.3); border-bottom: 1px solid rgba(255,255,255,0.3); } .vec-6::before { top: 60px; left: -100px; transform: rotate(-45deg); } .vec-6::after { bottom: 60px; right: -100px; transform: rotate(-45deg); }
         .vec-7 { background-image: url('data:image/svg+xml;utf8,<svg width="60" height="60" viewBox="0 0 24 24" fill="white" fill-opacity="0.1" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L14.4 9.6H22L15.8 14.4L18.2 22L12 17.2L5.8 22L8.2 14.4L2 9.6H9.6L12 2Z"/></svg>'); background-size: 80px 80px; mask-image: linear-gradient(to bottom, black 0%, transparent 80%); -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 80%); }
-
-        /* 8. Viền dập sóng (Scalloped Edge) */
-        .vec-8::before { content: ''; position: absolute; inset: 20px; border: 2px solid rgba(255,255,255,0.2); }
-        .vec-8 { background-image: radial-gradient(circle at 15px 15px, rgba(255,255,255,0.15) 5px, transparent 6px); background-size: 30px 30px; background-position: -15px -15px; }
-
-        /* 9. Khung khối lệnh Hình học (Geometric Box) */
-        .vec-9::before { content: ''; position: absolute; top: 40px; bottom: 40px; left: 40px; right: 40px; border-left: 4px solid rgba(255,255,255,0.5); border-right: 4px solid rgba(255,255,255,0.5); }
-        .vec-9::after { content: ''; position: absolute; top: 60px; bottom: 60px; left: 20px; right: 20px; border-top: 4px solid rgba(255,255,255,0.5); border-bottom: 4px solid rgba(255,255,255,0.5); }
-
-        /* 10. Pháo giấy nhạt (Soft Confetti) */
-        .vec-10 { background-image: 
-            radial-gradient(circle, rgba(255,255,255,0.3) 4px, transparent 5px),
-            radial-gradient(circle, rgba(255,255,255,0.2) 6px, transparent 7px),
-            radial-gradient(circle, rgba(255,255,255,0.1) 8px, transparent 9px);
-            background-size: 150px 150px, 220px 220px, 300px 300px;
-            background-position: 0 0, 75px 110px, 150px 50px;
-        }
+        .vec-8::before { content: ''; position: absolute; inset: 20px; border: 2px solid rgba(255,255,255,0.2); } .vec-8 { background-image: radial-gradient(circle at 15px 15px, rgba(255,255,255,0.15) 5px, transparent 6px); background-size: 30px 30px; background-position: -15px -15px; }
+        .vec-9::before { content: ''; position: absolute; top: 40px; bottom: 40px; left: 40px; right: 40px; border-left: 4px solid rgba(255,255,255,0.5); border-right: 4px solid rgba(255,255,255,0.5); } .vec-9::after { content: ''; position: absolute; top: 60px; bottom: 60px; left: 20px; right: 20px; border-top: 4px solid rgba(255,255,255,0.5); border-bottom: 4px solid rgba(255,255,255,0.5); }
+        .vec-10 { background-image: radial-gradient(circle, rgba(255,255,255,0.3) 4px, transparent 5px), radial-gradient(circle, rgba(255,255,255,0.2) 6px, transparent 7px), radial-gradient(circle, rgba(255,255,255,0.1) 8px, transparent 9px); background-size: 150px 150px, 220px 220px, 300px 300px; background-position: 0 0, 75px 110px, 150px 50px; }
 
         .content-layer {
             position: relative;
@@ -131,9 +153,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between; /* Đẩy chữ về 2 phía trên và dưới */
-            padding: 70px 50px; /* Tăng lề để chữ không dính sát viền */
+            justify-content: space-between;
+            padding: 70px 50px;
             text-align: center;
+            box-sizing: border-box;
         }
 
         /* Nhóm văn bản trên cùng */
@@ -143,7 +166,8 @@
             align-items: center;
             z-index: 20;
             width: 100%;
-            flex-shrink: 0; /* Ép không cho thay đổi kích thước khi render */
+            flex-shrink: 0;
+            box-sizing: border-box;
         }
         
         /* Khu vực giữa chứa không gian an toàn cho ảnh */
@@ -165,8 +189,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            flex-shrink: 0; /* Ép không cho thay đổi kích thước khi render */
+            flex-shrink: 0;
             transition: all 0.5s ease;
+            box-sizing: border-box;
         }
 
         /* KHUNG ẢNH */
@@ -180,6 +205,11 @@
             background: rgba(255,255,255,0.2);
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .photo-frame {
             width: 100%;
@@ -190,15 +220,15 @@
             background-color: #e2e8f0;
             position: relative;
             z-index: 10;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .photo-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: top center; /* Ưu tiên giữ khuôn mặt không bị lẹm */
+            object-position: top center;
         }
 
-        /* KHẮC PHỤC LỖI XUẤT ẢNH: LỚP PHỦ MỜ (FADE OVERLAY) CHO CHẾ ĐỘ 9, 10, 11 */
         .photo-frame::after {
             content: '';
             position: absolute;
@@ -208,137 +238,57 @@
             transition: all 0.5s ease;
         }
 
-        /* THÊM 10 CHẾ ĐỘ HIỂN THỊ ẢNH TẢI LÊN */
-        .photo-frame-wrapper {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-        }
-        .photo-frame {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 100%;
-            height: 100%;
-        }
+        /* CÁC CHẾ ĐỘ ẢNH (1-11) */
+        [data-image-mode="1"] .photo-frame-wrapper { width: 600px; height: 600px; border-radius: 50%; } [data-image-mode="1"] .photo-frame { border-radius: 50%; }
+        [data-image-mode="2"] .photo-frame-wrapper { width: 800px; height: 800px; border-radius: 50%; } [data-image-mode="2"] .photo-frame { border-radius: 50%; }
+        [data-image-mode="3"] .photo-frame-wrapper { width: 600px; height: 800px; border-radius: 50%; } [data-image-mode="3"] .photo-frame { border-radius: 50%; }
+        [data-image-mode="4"] .photo-frame-wrapper { width: 650px; height: 650px; border-radius: 40px; } [data-image-mode="4"] .photo-frame { border-radius: 30px; }
+        [data-image-mode="5"] .photo-frame-wrapper { width: 700px; height: 900px; border-radius: 30px; } [data-image-mode="5"] .photo-frame { border-radius: 20px; }
+        [data-image-mode="6"] .photo-frame-wrapper { width: 650px; height: 850px; border-radius: 325px 325px 20px 20px; } [data-image-mode="6"] .photo-frame { border-radius: 310px 310px 10px 10px; }
+        [data-image-mode="7"] .photo-frame-wrapper { width: 650px; height: 650px; border-radius: 0; background: var(--text-color); padding: 12px; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); } [data-image-mode="7"] .photo-frame { border-radius: 0; border: none; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
+        [data-image-mode="8"] .photo-frame-wrapper { width: 700px; height: 700px; border-radius: 0; background: var(--text-color); padding: 12px; clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); } [data-image-mode="8"] .photo-frame { border-radius: 0; border: none; clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
 
-        /* 1. Tròn (Mặc định) */
-        [data-image-mode="1"] .photo-frame-wrapper { width: 600px; height: 600px; border-radius: 50%; }
-        [data-image-mode="1"] .photo-frame { border-radius: 50%; }
-
-        /* 2. Tròn lớn */
-        [data-image-mode="2"] .photo-frame-wrapper { width: 800px; height: 800px; border-radius: 50%; }
-        [data-image-mode="2"] .photo-frame { border-radius: 50%; }
-
-        /* 3. Bầu dục */
-        [data-image-mode="3"] .photo-frame-wrapper { width: 600px; height: 800px; border-radius: 50%; }
-        [data-image-mode="3"] .photo-frame { border-radius: 50%; }
-
-        /* 4. Vuông bo góc */
-        [data-image-mode="4"] .photo-frame-wrapper { width: 650px; height: 650px; border-radius: 40px; }
-        [data-image-mode="4"] .photo-frame { border-radius: 30px; }
-
-        /* 5. Chữ nhật đứng */
-        [data-image-mode="5"] .photo-frame-wrapper { width: 700px; height: 900px; border-radius: 30px; }
-        [data-image-mode="5"] .photo-frame { border-radius: 20px; }
-
-        /* 6. Vòm cổng (Arch) */
-        [data-image-mode="6"] .photo-frame-wrapper { width: 650px; height: 850px; border-radius: 325px 325px 20px 20px; }
-        [data-image-mode="6"] .photo-frame { border-radius: 310px 310px 10px 10px; }
-
-        /* 7. Hình thoi (Diamond) */
-        [data-image-mode="7"] .photo-frame-wrapper { width: 650px; height: 650px; border-radius: 0; background: var(--text-color); padding: 12px; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
-        [data-image-mode="7"] .photo-frame { border-radius: 0; border: none; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
-
-        /* 8. Lục giác (Hexagon) */
-        [data-image-mode="8"] .photo-frame-wrapper { width: 700px; height: 700px; border-radius: 0; background: var(--text-color); padding: 12px; clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
-        [data-image-mode="8"] .photo-frame { border-radius: 0; border: none; clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
-
-        /* --- SỬA THUẬT TOÁN ẢNH CỦA CHẾ ĐỘ 9, 10, 11 (Lấy đúng chiều rộng, không tự scale méo ảnh) --- */
-        
-        /* 9. Chiếm tối đa 1/2 màn hình trên */
-        [data-image-mode="9"] .photo-frame-wrapper { 
-            position: absolute; top: 0; left: 0; width: 100%; height: auto; max-height: 55%; margin: 0; padding: 0; 
-            border-radius: 0; background: transparent; z-index: 1; box-shadow: none; border: none; 
-        }
+        /* Tràn viền */
+        [data-image-mode="9"] .photo-frame-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: auto; max-height: 55%; margin: 0; padding: 0; border-radius: 0; background: transparent; z-index: 1; box-shadow: none; border: none; }
         [data-image-mode="9"] .photo-frame { border: none; border-radius: 0; background-color: transparent; height: 100%; display: block; }
         [data-image-mode="9"] .photo-frame img { width: 100%; height: auto; object-fit: unset; display: block; }
         [data-image-mode="9"] .photo-frame::after { height: 40%; background: linear-gradient(to bottom, transparent, var(--bg-color-end)); }
         [data-image-mode="9"] .photo-frame-wrapper + div { margin-top: 350px; }
 
-        /* 10. Chiếm tối đa 2/3 màn hình trên */
-        [data-image-mode="10"] .photo-frame-wrapper { 
-            position: absolute; top: 0; left: 0; width: 100%; height: auto; max-height: 70%; margin: 0; padding: 0; 
-            border-radius: 0; background: transparent; z-index: 1; box-shadow: none; border: none; 
-        }
+        [data-image-mode="10"] .photo-frame-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: auto; max-height: 70%; margin: 0; padding: 0; border-radius: 0; background: transparent; z-index: 1; box-shadow: none; border: none; }
         [data-image-mode="10"] .photo-frame { border: none; border-radius: 0; background-color: transparent; height: 100%; display: block; }
         [data-image-mode="10"] .photo-frame img { width: 100%; height: auto; object-fit: unset; display: block; }
         [data-image-mode="10"] .photo-frame::after { height: 45%; background: linear-gradient(to bottom, transparent, var(--bg-color-end)); }
         [data-image-mode="10"] .photo-frame-wrapper + div { margin-top: 550px; }
 
-        /* 11. Chiếm tối đa 3/4 màn hình trên (Toàn cảnh) */
-        [data-image-mode="11"] .photo-frame-wrapper { 
-            position: absolute; top: 0; left: 0; width: 100%; height: auto; max-height: 85%; margin: 0; padding: 0; 
-            border-radius: 0; background: transparent; z-index: 1; box-shadow: none; border: none; 
-        }
+        [data-image-mode="11"] .photo-frame-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: auto; max-height: 85%; margin: 0; padding: 0; border-radius: 0; background: transparent; z-index: 1; box-shadow: none; border: none; }
         [data-image-mode="11"] .photo-frame { border: none; border-radius: 0; background-color: transparent; height: 100%; display: block; }
         [data-image-mode="11"] .photo-frame img { width: 100%; height: auto; object-fit: unset; display: block; }
         [data-image-mode="11"] .photo-frame::after { height: 50%; background: linear-gradient(to bottom, transparent, var(--bg-color-end)); }
         [data-image-mode="11"] .photo-frame-wrapper + div { margin-top: 750px; }
 
-        /* --- 4 KIỂU MỚI: VÒNG NGUYỆT QUẾ LẤP LÁNH (CHẾ ĐỘ 12, 13, 14, 15) --- */
-        
-        .wreath-decor { display: none; } /* Mặc định ẩn vòng nguyệt quế */
+        /* Nguyệt Quế */
+        .wreath-decor { display: none; }
+        [data-image-mode="12"] .photo-frame-wrapper { width: 550px; height: 550px; border-radius: 50%; box-shadow: 0 0 80px rgba(251, 191, 36, 0.6); background: rgba(251, 191, 36, 0.1); } [data-image-mode="12"] .photo-frame { border: 8px solid #FCD34D; border-radius: 50%; } [data-image-mode="12"] .wreath-decor { display: flex; color: #FBBF24; }
+        [data-image-mode="13"] .photo-frame-wrapper { width: 550px; height: 550px; border-radius: 50%; box-shadow: 0 0 80px rgba(209, 213, 219, 0.6); background: rgba(209, 213, 219, 0.1); } [data-image-mode="13"] .photo-frame { border: 8px solid #E5E7EB; border-radius: 50%; } [data-image-mode="13"] .wreath-decor { display: flex; color: #E5E7EB; }
+        [data-image-mode="14"] .photo-frame-wrapper { width: 550px; height: 550px; border-radius: 50%; box-shadow: 0 0 100px rgba(34, 211, 238, 0.8); background: rgba(34, 211, 238, 0.15); } [data-image-mode="14"] .photo-frame { border: 8px solid #67E8F9; border-radius: 50%; } [data-image-mode="14"] .wreath-decor { display: flex; color: #22D3EE; }
+        [data-image-mode="15"] .photo-frame-wrapper { width: 550px; height: 550px; border-radius: 50%; box-shadow: 0 0 80px rgba(244, 114, 182, 0.6); background: rgba(244, 114, 182, 0.1); } [data-image-mode="15"] .photo-frame { border: 8px solid #F9A8D4; border-radius: 50%; } [data-image-mode="15"] .wreath-decor { display: flex; color: #F472B6; }
 
-        /* 12. Vòng nguyệt quế Vàng (Gold Laurel) */
-        [data-image-mode="12"] .photo-frame-wrapper { width: 550px; height: 550px; border-radius: 50%; box-shadow: 0 0 80px rgba(251, 191, 36, 0.6); background: rgba(251, 191, 36, 0.1); }
-        [data-image-mode="12"] .photo-frame { border: 8px solid #FCD34D; border-radius: 50%; }
-        [data-image-mode="12"] .wreath-decor { display: flex; color: #FBBF24; } /* Màu vàng Tailwind */
+        .text-block { position: relative; z-index: 10; max-width: 100%; }
 
-        /* 13. Vòng nguyệt quế Bạc (Silver Laurel) */
-        [data-image-mode="13"] .photo-frame-wrapper { width: 550px; height: 550px; border-radius: 50%; box-shadow: 0 0 80px rgba(209, 213, 219, 0.6); background: rgba(209, 213, 219, 0.1); }
-        [data-image-mode="13"] .photo-frame { border: 8px solid #E5E7EB; border-radius: 50%; }
-        [data-image-mode="13"] .wreath-decor { display: flex; color: #E5E7EB; } /* Màu Bạc */
-
-        /* 14. Vòng nguyệt quế Kim cương (Diamond Glow) */
-        [data-image-mode="14"] .photo-frame-wrapper { width: 550px; height: 550px; border-radius: 50%; box-shadow: 0 0 100px rgba(34, 211, 238, 0.8); background: rgba(34, 211, 238, 0.15); }
-        [data-image-mode="14"] .photo-frame { border: 8px solid #67E8F9; border-radius: 50%; }
-        [data-image-mode="14"] .wreath-decor { display: flex; color: #22D3EE; } /* Màu Xanh pha lê */
-
-        /* 15. Vòng nguyệt quế Hoa hồng (Rose Gold Laurel) */
-        [data-image-mode="15"] .photo-frame-wrapper { width: 550px; height: 550px; border-radius: 50%; box-shadow: 0 0 80px rgba(244, 114, 182, 0.6); background: rgba(244, 114, 182, 0.1); }
-        [data-image-mode="15"] .photo-frame { border: 8px solid #F9A8D4; border-radius: 50%; }
-        [data-image-mode="15"] .wreath-decor { display: flex; color: #F472B6; } /* Màu hồng dịu */
-
-
-        /* Đảm bảo text luôn nổi lên trên khi dùng mode ảnh tràn viền */
-        .text-block { position: relative; z-index: 10; }
-
-        /* --- 10 PHONG CÁCH CHỮ NGHỆ THUẬT (TÊN HỌC SINH) --- */
+        /* FONTS */
         #student-name { transition: all 0.3s ease; }
-        
-        /* 1. Sang trọng (Mặc định) */
         .name-style-1 { font-family: 'Playfair Display', serif; }
-        /* 2. Cổ điển Hoàng Gia */
         .name-style-2 { font-family: 'Cinzel', serif; letter-spacing: 5px; }
-        /* 3. Thư pháp tinh tế */
         .name-style-3 { font-family: 'Dancing Script', cursive; text-transform: capitalize !important; font-size: 1.2em; letter-spacing: 2px; }
-        /* 4. Khối Hiện đại */
         .name-style-4 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 8px; font-size: 1.1em; transform: scaleY(1.1); }
-        /* 5. Vui tươi Retro */
         .name-style-5 { font-family: 'Pacifico', cursive; text-transform: capitalize !important; letter-spacing: 3px; font-weight: normal; }
-        /* 6. Viền rỗng (Outline) */
         .name-style-6 { font-family: 'Montserrat', sans-serif; color: transparent; -webkit-text-stroke: 3px var(--text-color); }
-        /* 7. Khối 3D Đậm */
         .name-style-7 { font-family: 'Montserrat', sans-serif; text-shadow: 2px 2px 0px #000, 4px 4px 0px rgba(0,0,0,0.5), 6px 6px 0px rgba(0,0,0,0.2) !important; }
-        /* 8. Neon Glow */
         .name-style-8 { font-family: 'Righteous', cursive; text-shadow: 0 0 10px var(--text-color), 0 0 20px var(--text-color), 0 0 40px var(--text-color) !important; }
-        /* 9. Gradient Trữ Tình */
         .name-style-9 { font-family: 'Playfair Display', serif; background: linear-gradient(to right, #fdfbfb, #ebedee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none !important; }
-        /* 10. Cyber Block */
         .name-style-10 { font-family: 'Montserrat', sans-serif; letter-spacing: -2px; font-weight: 900; transform: skewX(-10deg); text-shadow: 5px 0px 0px rgba(255,0,0,0.5), -5px 0px 0px rgba(0,255,255,0.5) !important; }
 
-        /* --- 10 PHONG CÁCH CHỮ TUYÊN DƯƠNG --- */
         #commendation-title { transition: all 0.3s ease; }
         .title-style-1 h2 { font-family: 'Montserrat', sans-serif; }
         .title-style-2 h2 { font-family: 'Cinzel', serif; letter-spacing: 2px; }
@@ -351,268 +301,104 @@
         .title-style-9 h2 { background: linear-gradient(to right, #ffd700, #ff8c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none !important; }
         .title-style-10 h2 { font-family: 'Pacifico', cursive; font-weight: normal; }
 
+        /* LAYOUTS */
+        #text-layout-wrapper { max-width: 100%; box-sizing: border-box; }
+        .layout-1 { align-items: center; text-align: center; font-family: 'Montserrat', sans-serif; } .layout-1 #student-name-container { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+        .layout-2 { align-items: flex-start; text-align: left; padding-left: 80px; font-family: 'Lora', serif; } .layout-2 #commendation-title { text-align: left; font-family: 'Oswald', sans-serif; border-left: 6px solid var(--text-color); padding-left: 20px; } .layout-2 #student-name-container { flex-direction: row; justify-content: flex-start; flex-wrap: wrap; } .layout-2 #commendation-text { margin-left: 0; font-family: 'Lora', serif; font-size: 1.6rem; } .layout-2 #school-name { text-align: left; align-self: flex-start; }
+        .layout-3 { align-items: flex-end; text-align: right; padding-right: 80px; font-family: 'Jura', sans-serif; } .layout-3 #commendation-title { text-align: right; border-right: 6px solid var(--text-color); padding-right: 20px; } .layout-3 #student-name-container { flex-direction: row-reverse; justify-content: flex-start; flex-wrap: wrap; } .layout-3 #commendation-text { margin-right: 0; text-align: right; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 300; } .layout-3 #school-name { text-align: right; align-self: flex-end; }
+        .layout-4 { align-items: center; text-align: center; font-family: 'Prata', serif; } .layout-4 #commendation-title h2 { letter-spacing: 8px; font-weight: normal; } .layout-4 #student-name-container { flex-direction: column; gap: 20px; } .layout-4 #commendation-text { font-style: normal; border-top: 1px solid rgba(255,255,255,0.5); border-bottom: 1px solid rgba(255,255,255,0.5); padding: 20px 0; }
+        .layout-5 { align-items: center; text-align: center; } .layout-5 #commendation-title h2:first-child { font-family: 'Pattaya', sans-serif; font-size: 5rem; text-transform: capitalize; transform: rotate(-5deg); margin-bottom: -20px; z-index: 2; position: relative; } .layout-5 #student-name { font-family: 'Pattaya', sans-serif; text-transform: capitalize; font-size: 6rem; } .layout-5 #commendation-text { font-family: 'Be Vietnam Pro', sans-serif; }
+        .layout-6 { align-items: center; text-align: center; font-family: 'Be Vietnam Pro', sans-serif; } .layout-6 .text-shadow, .layout-6 .text-shadow-heavy { text-shadow: none !important; } .layout-6 #commendation-title h2 { font-weight: 900; letter-spacing: -1px; } .layout-6 #student-name { font-weight: 900; letter-spacing: -2px; } .layout-6 #commendation-text { font-weight: 400; font-size: 1.3rem; max-width: 600px; opacity: 0.8; }
+        .layout-7 { align-items: flex-start; text-align: left; padding-left: 80px; } .layout-7 #commendation-title h2 { font-family: 'Charm', cursive; text-transform: none; font-size: 4rem; } .layout-7 #student-name { font-family: 'Charm', cursive; text-transform: none; font-size: 7rem; } .layout-7 #student-name-container { flex-direction: row; justify-content: flex-start; flex-wrap: wrap; } .layout-7 #commendation-text { margin-left: 0; font-family: 'Lora', serif; font-style: italic; font-size: 1.5rem; } .layout-7 #school-name { text-align: left; align-self: flex-start; }
+        .layout-8 { align-items: stretch; text-align: justify; font-family: 'Oswald', sans-serif; padding: 0 60px; } .layout-8 #commendation-title h2 { font-family: 'Oswald', sans-serif; text-align: center; letter-spacing: 5px; } .layout-8 #student-name-container { flex-direction: row; justify-content: space-between; border-bottom: 4px solid var(--text-color); padding-bottom: 20px; flex-wrap: wrap; } .layout-8 #student-name { text-align: left; } .layout-8 #commendation-text { text-align: justify; font-family: 'Be Vietnam Pro', sans-serif; font-size: 1.3rem; margin-top: 20px; }
+        .layout-9 { align-items: center; text-align: center; font-family: 'Comfortaa', cursive; } .layout-9 #commendation-title h2 { font-family: 'Comfortaa', cursive; font-weight: 700; } .layout-9 #student-name { font-family: 'Comfortaa', cursive; font-weight: 700; font-size: 4rem; } .layout-9 #student-name-container { flex-direction: column; gap: 15px; } .layout-9 #commendation-text { font-family: 'Comfortaa', cursive; font-size: 1.4rem; line-height: 1.8; }
+        .layout-10 { align-items: center; text-align: center; } .layout-10 #commendation-title h2 { font-family: 'Yeseva One', serif; font-size: 3.5rem; letter-spacing: 2px; } .layout-10 #student-name { font-family: 'Yeseva One', serif; } .layout-10 #commendation-text { font-family: 'Sriracha', cursive; font-size: 1.8rem; transform: rotate(-2deg); background: rgba(0,0,0,0.2); padding: 15px 30px; border-radius: 15px; }
+        .layout-11 { align-items: flex-end; text-align: right; padding-right: 60px; font-family: 'Jura', sans-serif; } .layout-11 #commendation-title h2 { font-family: 'Righteous', cursive; letter-spacing: 2px; } .layout-11 #student-name-container { flex-direction: row-reverse; justify-content: flex-start; flex-wrap: wrap; } .layout-11 #student-name { font-style: italic; } .layout-11 #commendation-text { text-align: right; border-right: 4px solid var(--text-color); padding-right: 15px; }
+        .layout-12 { align-items: center; text-align: center; font-family: 'Lora', serif; } .layout-12 #commendation-title { border-top: 2px solid var(--text-color); border-bottom: 2px solid var(--text-color); padding: 15px 0; margin-bottom: 30px; width: 80%; display: flex; flex-direction: column; align-items: center; } .layout-12 #commendation-title h2 { font-family: 'Prata', serif; letter-spacing: 4px; text-align: center; } .layout-12 #student-name-container { flex-direction: column; gap: 15px; } .layout-12 #commendation-text { max-width: 700px; font-size: 1.5rem; text-align: center; }
+        .layout-13 { align-items: flex-start; text-align: left; padding-left: 40px; font-family: 'Be Vietnam Pro', sans-serif; } .layout-13 #commendation-title { display: flex; flex-direction: column; align-items: flex-start; } .layout-13 #commendation-title h2 { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; line-height: 0.9; letter-spacing: 2px; margin: 0; text-align: left; } .layout-13 #student-name-container { flex-direction: row; justify-content: flex-start; margin-top: 10px; flex-wrap: wrap; } .layout-13 #student-name { font-family: 'Bebas Neue', sans-serif; font-size: 7rem; line-height: 0.9; text-align: left; } .layout-13 #commendation-text { margin-top: 20px; font-weight: 700; max-width: 600px; text-align: left; }
+        .layout-14 { align-items: center; text-align: center; font-family: 'Cinzel', serif; } .layout-14 #commendation-title h2 { letter-spacing: 6px; font-weight: 400; text-align: center; } .layout-14 #student-name-container { flex-direction: column; gap: 20px; } .layout-14 #student-name { font-family: 'Dancing Script', cursive; font-size: 6rem; text-transform: capitalize; letter-spacing: 0; text-align: center; } .layout-14 #commendation-text { font-family: 'Lora', serif; font-style: italic; font-size: 1.4rem; letter-spacing: 1px; max-width: 650px; text-align: center; }
+        .layout-15 { align-items: stretch; text-align: justify; font-family: 'Jura', sans-serif; padding: 0 50px; } .layout-15 #commendation-title { display: flex; flex-direction: column; align-items: flex-end; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 10px; } .layout-15 #commendation-title h2 { letter-spacing: 5px; text-align: right; } .layout-15 #student-name-container { flex-direction: row; justify-content: space-between; margin-top: 20px; border-bottom: 1px dashed rgba(255,255,255,0.3); padding-bottom: 20px; flex-wrap: wrap; } .layout-15 #student-name { letter-spacing: 5px; text-align: left; } .layout-15 #commendation-text { font-weight: 700; margin-top: 20px; background: rgba(255,255,255,0.1); padding: 15px; border-left: 5px solid var(--text-color); text-align: left; }
+        .layout-16 { align-items: center; text-align: center; font-family: 'Comfortaa', cursive; } .layout-16 #commendation-title { transform: rotate(-3deg); display: flex; flex-direction: column; align-items: center; } .layout-16 #commendation-title h2 { font-family: 'Sriracha', cursive; text-align: center; } .layout-16 #student-name-container { flex-direction: row; gap: 20px; transform: rotate(2deg); margin-top: 20px; flex-wrap: wrap; justify-content: center; } .layout-16 #student-name { font-family: 'Sriracha', cursive; text-align: center; } .layout-16 #commendation-text { margin-top: 30px; font-weight: 700; background: rgba(255,255,255,0.85); color: #111; padding: 15px 25px; border-radius: 30px; transform: rotate(-1deg); text-shadow: none; box-shadow: 0 10px 20px rgba(0,0,0,0.2); text-align: center; }
+        .layout-17 { align-items: center; text-align: center; font-family: 'Oswald', sans-serif; } .layout-17 #commendation-title { display: flex; flex-direction: column; align-items: center; } .layout-17 #commendation-title h2 { text-transform: uppercase; font-weight: 700; letter-spacing: 2px; text-align: center; } .layout-17 #student-name-container { flex-direction: column; background: rgba(255,255,255,0.95); padding: 20px; width: 100%; transform: skewY(-2deg); margin: 30px 0; border-radius: 10px; box-shadow: 0 15px 30px rgba(0,0,0,0.3); } .layout-17 #student-name { color: #111 !important; text-shadow: none !important; letter-spacing: 5px; -webkit-text-fill-color: #111; text-align: center; } .layout-17 #student-name-container > div { filter: invert(1); } .layout-17 #commendation-text { font-family: 'Be Vietnam Pro', sans-serif; font-size: 1.4rem; max-width: 700px; text-transform: uppercase; font-weight: 700; text-align: center; }
+        .layout-18 { align-items: flex-end; text-align: right; padding-right: 50px; font-family: 'Lora', serif; } .layout-18 #commendation-title { display: flex; flex-direction: column; align-items: flex-end; } .layout-18 #commendation-title h2 { font-family: 'Charm', cursive; font-size: 3.5rem; text-transform: none; text-align: right; } .layout-18 #student-name-container { flex-direction: row-reverse; margin: 20px 0; flex-wrap: wrap; justify-content: flex-end;} .layout-18 #student-name { font-family: 'Charm', cursive; text-transform: none; font-size: 6rem; text-align: right; } .layout-18 #commendation-text { font-style: italic; opacity: 0.85; max-width: 600px; text-align: right; }
+        .layout-19 { align-items: flex-start; text-align: left; padding-left: 50px; font-family: 'Montserrat', sans-serif; } .layout-19 #commendation-title { display: flex; flex-direction: column; align-items: flex-start; } .layout-19 #commendation-title h2 { font-weight: 900; font-size: 4rem; line-height: 1.1; margin-bottom: 5px; text-align: left; } .layout-19 #student-name-container { flex-direction: row; border-left: 8px solid var(--text-color); padding-left: 20px; margin-left: 5px; flex-wrap: wrap; justify-content: flex-start;} .layout-19 #student-name { font-weight: 900; letter-spacing: -2px; text-align: left; } .layout-19 #commendation-text { margin-top: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; max-width: 650px; text-align: left; }
+        .layout-20 { align-items: stretch; font-family: 'Be Vietnam Pro', sans-serif; padding: 0 40px; } .layout-20 #commendation-title { display: flex; flex-direction: column; align-items: flex-start; } .layout-20 #commendation-title h2 { text-align: left; } .layout-20 #student-name-container { flex-direction: row-reverse; justify-content: flex-start; margin-top: 15px; flex-wrap: wrap; } .layout-20 #student-name { text-align: right; } .layout-20 #commendation-text { text-align: center; margin-top: 30px; font-style: italic; border: 1px dashed rgba(255,255,255,0.5); padding: 15px; border-radius: 10px; }
 
-        /* --- MỚI: 20 BỐ CỤC CHỮ NGHỆ THUẬT (LAYOUTS) --- */
-        
-        /* 1. Chuẩn mực (Mặc định) */
-        .layout-1 { align-items: center; text-align: center; font-family: 'Montserrat', sans-serif; }
-        .layout-1 #student-name-container { flex-direction: row; }
-        
-        /* 2. Tạp chí Thời trang (Căn trái, Lora + Oswald) */
-        .layout-2 { align-items: flex-start; text-align: left; padding-left: 80px; font-family: 'Lora', serif; }
-        .layout-2 #commendation-title { text-align: left; font-family: 'Oswald', sans-serif; border-left: 6px solid var(--text-color); padding-left: 20px; }
-        .layout-2 #student-name-container { flex-direction: row; justify-content: flex-start; }
-        .layout-2 #commendation-text { margin-left: 0; font-family: 'Lora', serif; font-size: 1.6rem; }
-        .layout-2 #school-name { text-align: left; align-self: flex-start; }
+        /* --- MỚI: 10 BỐ CỤC CHỮ CHUYÊN DỤNG CHO KHỔ NGANG (21 - 30) --- */
+        [data-orientation="landscape"] .layout-21 { align-items: center; text-align: center; font-family: 'Jura', sans-serif; width: 100%; }
+        [data-orientation="landscape"] .layout-21 #student-name-container { flex-direction: row; justify-content: center; gap: 40px; margin: 20px 0; }
+        [data-orientation="landscape"] .layout-21 #commendation-title h2 { letter-spacing: 15px; font-weight: normal; }
 
-        /* 3. Điện ảnh (Căn phải, chữ mảnh, Jura) */
-        .layout-3 { align-items: flex-end; text-align: right; padding-right: 80px; font-family: 'Jura', sans-serif; }
-        .layout-3 #commendation-title { text-align: right; border-right: 6px solid var(--text-color); padding-right: 20px; }
-        .layout-3 #student-name-container { flex-direction: row-reverse; justify-content: flex-start; }
-        .layout-3 #commendation-text { margin-right: 0; text-align: right; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 300; }
-        .layout-3 #school-name { text-align: right; align-self: flex-end; }
+        [data-orientation="landscape"] .layout-22 { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; font-family: 'Lora', serif; padding: 0 100px; text-align: left; }
+        [data-orientation="landscape"] .layout-22 #commendation-title { width: 100%; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 20px; margin-bottom: 20px; }
+        [data-orientation="landscape"] .layout-22 #student-name-container { width: 45%; justify-content: flex-start; }
+        [data-orientation="landscape"] .layout-22 #commendation-text { width: 50%; text-align: right; font-style: italic; border-left: 2px solid var(--text-color); padding-left: 30px; font-size: 24px !important; }
 
-        /* 4. Cổ điển Á Đông (Căn giữa, Prata, Khoảng cách hẹp) */
-        .layout-4 { align-items: center; text-align: center; font-family: 'Prata', serif; }
-        .layout-4 #commendation-title h2 { letter-spacing: 8px; font-weight: normal; }
-        .layout-4 #student-name-container { flex-direction: column; gap: 20px; }
-        .layout-4 #commendation-text { font-style: normal; border-top: 1px solid rgba(255,255,255,0.5); border-bottom: 1px solid rgba(255,255,255,0.5); padding: 20px 0; }
+        [data-orientation="landscape"] .layout-23 { align-items: center; justify-content: center; font-family: 'Be Vietnam Pro', sans-serif; }
+        [data-orientation="landscape"] .layout-23 #student-name { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 200px !important; opacity: 0.15; white-space: nowrap; z-index: -1; font-family: 'Bebas Neue', sans-serif; pointer-events: none; }
+        [data-orientation="landscape"] .layout-23 #student-name-container { justify-content: center; margin-bottom: 30px; }
+        [data-orientation="landscape"] .layout-23 #commendation-title h2 { font-family: 'Montserrat', sans-serif; font-weight: 900; }
 
-        /* 5. Tự do Thơ ca (Pattaya, Bố cục lệch) */
-        .layout-5 { align-items: center; text-align: center; }
-        .layout-5 #commendation-title h2:first-child { font-family: 'Pattaya', sans-serif; font-size: 5rem; text-transform: capitalize; transform: rotate(-5deg); margin-bottom: -20px; z-index: 2; position: relative; }
-        .layout-5 #student-name { font-family: 'Pattaya', sans-serif; text-transform: capitalize; font-size: 6rem; }
-        .layout-5 #commendation-text { font-family: 'Be Vietnam Pro', sans-serif; }
+        [data-orientation="landscape"] .layout-24 { align-items: flex-start; text-align: left; padding-left: 100px; font-family: 'Comfortaa', cursive; }
+        [data-orientation="landscape"] .layout-24 #commendation-title, [data-orientation="landscape"] .layout-24 #student-name-container { justify-content: flex-start; }
+        [data-orientation="landscape"] .layout-24 #commendation-text { text-align: left; margin-left: 0; max-width: 900px !important; }
 
-        /* 6. Tối giản Hiện đại (Be Vietnam Pro, Không Shadow) */
-        .layout-6 { align-items: center; text-align: center; font-family: 'Be Vietnam Pro', sans-serif; }
-        .layout-6 .text-shadow, .layout-6 .text-shadow-heavy { text-shadow: none !important; }
-        .layout-6 #commendation-title h2 { font-weight: 900; letter-spacing: -1px; }
-        .layout-6 #student-name { font-weight: 900; letter-spacing: -2px; }
-        .layout-6 #commendation-text { font-weight: 400; font-size: 1.3rem; max-width: 600px; opacity: 0.8; }
+        [data-orientation="landscape"] .layout-25 { align-items: flex-end; text-align: right; padding-right: 100px; font-family: 'Comfortaa', cursive; }
+        [data-orientation="landscape"] .layout-25 #commendation-title, [data-orientation="landscape"] .layout-25 #student-name-container { justify-content: flex-end; flex-direction: row-reverse; }
+        [data-orientation="landscape"] .layout-25 #commendation-text { text-align: right; margin-right: 0; max-width: 900px !important; }
 
-        /* 7. Nàng Thơ (Charm, Mềm mại, Căn trái) */
-        .layout-7 { align-items: flex-start; text-align: left; padding-left: 80px; }
-        .layout-7 #commendation-title h2 { font-family: 'Charm', cursive; text-transform: none; font-size: 4rem; }
-        .layout-7 #student-name { font-family: 'Charm', cursive; text-transform: none; font-size: 7rem; }
-        .layout-7 #student-name-container { flex-direction: row; justify-content: flex-start; }
-        .layout-7 #commendation-text { margin-left: 0; font-family: 'Lora', serif; font-style: italic; font-size: 1.5rem; }
-        .layout-7 #school-name { text-align: left; align-self: flex-start; }
+        [data-orientation="landscape"] .layout-26 { align-items: center; text-align: center; font-family: 'Cinzel', serif; }
+        [data-orientation="landscape"] .layout-26 #student-name { letter-spacing: 20px; margin-right: -20px; }
+        [data-orientation="landscape"] .layout-26 #commendation-title h2:first-child { letter-spacing: 30px; margin-right: -30px; }
+        [data-orientation="landscape"] .layout-26 #commendation-text { font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 22px !important; letter-spacing: 2px; }
 
-        /* 8. Khối Kiến trúc (Oswald, Ép vuông vức) */
-        .layout-8 { align-items: stretch; text-align: justify; font-family: 'Oswald', sans-serif; padding: 0 60px; }
-        .layout-8 #commendation-title h2 { font-family: 'Oswald', sans-serif; text-align: center; letter-spacing: 5px; }
-        .layout-8 #student-name-container { flex-direction: row; justify-content: space-between; border-bottom: 4px solid var(--text-color); padding-bottom: 20px; }
-        .layout-8 #student-name { text-align: left; }
-        .layout-8 #commendation-text { text-align: justify; font-family: 'Be Vietnam Pro', sans-serif; font-size: 1.3rem; margin-top: 20px; }
+        [data-orientation="landscape"] .layout-27 { align-items: flex-start; padding-left: 80px; font-family: 'Oswald', sans-serif; }
+        [data-orientation="landscape"] .layout-27 #student-name-container { background: var(--text-color); padding: 10px 50px; transform: skewX(-15deg); border-radius: 5px; }
+        [data-orientation="landscape"] .layout-27 #student-name { color: #111 !important; text-shadow: none !important; -webkit-text-fill-color: #111; transform: skewX(15deg); }
+        [data-orientation="landscape"] .layout-27 #class-badge { filter: invert(1); transform: skewX(15deg); }
+        [data-orientation="landscape"] .layout-27 #commendation-text { text-align: left; margin-left: 0; font-family: 'Be Vietnam Pro', sans-serif; text-transform: uppercase; margin-top: 20px; }
 
-        /* 9. Thân thiện Khối Tròn (Comfortaa, Rộng rãi) */
-        .layout-9 { align-items: center; text-align: center; font-family: 'Comfortaa', cursive; }
-        .layout-9 #commendation-title h2 { font-family: 'Comfortaa', cursive; font-weight: 700; }
-        .layout-9 #student-name { font-family: 'Comfortaa', cursive; font-weight: 700; font-size: 4rem; }
-        .layout-9 #student-name-container { flex-direction: column; gap: 15px; }
-        .layout-9 #commendation-text { font-family: 'Comfortaa', cursive; font-size: 1.4rem; line-height: 1.8; }
+        [data-orientation="landscape"] .layout-28 { align-items: center; text-align: center; font-family: 'Lora', serif; }
+        [data-orientation="landscape"] .layout-28 #student-name { font-family: 'Charm', cursive; font-size: 110px !important; text-transform: none; }
+        [data-orientation="landscape"] .layout-28 #commendation-title h2 { font-style: italic; font-weight: 400; }
+        [data-orientation="landscape"] .layout-28 #commendation-text { max-width: 1000px !important; border-top: 1px solid rgba(255,255,255,0.4); padding-top: 20px; }
 
-        /* 10. Nghệ thuật Retro (Yeseva One + Sriracha) */
-        .layout-10 { align-items: center; text-align: center; }
-        .layout-10 #commendation-title h2 { font-family: 'Yeseva One', serif; font-size: 3.5rem; letter-spacing: 2px; }
-        .layout-10 #student-name { font-family: 'Yeseva One', serif; }
-        .layout-10 #commendation-text { font-family: 'Sriracha', cursive; font-size: 1.8rem; transform: rotate(-2deg); background: rgba(0,0,0,0.2); padding: 15px 30px; border-radius: 15px; }
+        [data-orientation="landscape"] .layout-29 { flex-direction: row; align-items: flex-end; justify-content: space-between; padding: 0 80px; font-family: 'Righteous', cursive; }
+        [data-orientation="landscape"] .layout-29 #commendation-title { text-align: left; width: auto; }
+        [data-orientation="landscape"] .layout-29 #student-name-container { width: auto; flex-direction: column; align-items: flex-end; }
+        [data-orientation="landscape"] .layout-29 #commendation-text { display: none; } /* Ẩn lời chúc để tập trung vào tên */
 
-        /* 11. Cyberpunk Đột Phá (Righteous + Jura) */
-        .layout-11 { align-items: flex-end; text-align: right; padding-right: 60px; font-family: 'Jura', sans-serif; }
-        .layout-11 #commendation-title h2 { font-family: 'Righteous', cursive; letter-spacing: 2px; }
-        .layout-11 #student-name-container { flex-direction: row-reverse; justify-content: flex-start; }
-        .layout-11 #student-name { font-style: italic; }
-        .layout-11 #commendation-text { text-align: right; border-right: 4px solid var(--text-color); padding-right: 15px; }
+        [data-orientation="landscape"] .layout-30 { align-items: center; text-align: center; font-family: 'Montserrat', sans-serif; border: 4px solid var(--text-color); padding: 40px; border-radius: 20px; background: rgba(0,0,0,0.2); backdrop-filter: blur(5px); }
+        [data-orientation="landscape"] .layout-30 #commendation-title { margin-bottom: 30px; }
+        [data-orientation="landscape"] .layout-30 #student-name-container { border-top: 2px dashed var(--text-color); border-bottom: 2px dashed var(--text-color); padding: 20px 0; }
+        [data-orientation="landscape"] .layout-30 #commendation-text { margin-top: 30px; }
 
-        /* 12. Thư Báo Cổ Điển (Prata + Lora) */
-        .layout-12 { align-items: center; text-align: center; font-family: 'Lora', serif; }
-        .layout-12 #commendation-title { border-top: 2px solid var(--text-color); border-bottom: 2px solid var(--text-color); padding: 15px 0; margin-bottom: 30px; width: 80%; display: flex; flex-direction: column; align-items: center; }
-        .layout-12 #commendation-title h2 { font-family: 'Prata', serif; letter-spacing: 4px; text-align: center; }
-        .layout-12 #student-name-container { flex-direction: column; gap: 15px; }
-        .layout-12 #commendation-text { max-width: 700px; font-size: 1.5rem; text-align: center; }
 
-        /* 13. Brutalism To Bản (Bebas Neue) */
-        .layout-13 { align-items: flex-start; text-align: left; padding-left: 40px; font-family: 'Be Vietnam Pro', sans-serif; }
-        .layout-13 #commendation-title { display: flex; flex-direction: column; align-items: flex-start; }
-        .layout-13 #commendation-title h2 { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; line-height: 0.9; letter-spacing: 2px; margin: 0; text-align: left; }
-        .layout-13 #student-name-container { flex-direction: row; justify-content: flex-start; margin-top: 10px; }
-        .layout-13 #student-name { font-family: 'Bebas Neue', sans-serif; font-size: 7rem; line-height: 0.9; text-align: left; }
-        .layout-13 #commendation-text { margin-top: 20px; font-weight: 700; max-width: 600px; text-align: left; }
-
-        /* 14. Thanh Lịch Thiệp Cưới (Cinzel + Dancing Script) */
-        .layout-14 { align-items: center; text-align: center; font-family: 'Cinzel', serif; }
-        .layout-14 #commendation-title h2 { letter-spacing: 6px; font-weight: 400; text-align: center; }
-        .layout-14 #student-name-container { flex-direction: column; gap: 20px; }
-        .layout-14 #student-name { font-family: 'Dancing Script', cursive; font-size: 6rem; text-transform: capitalize; letter-spacing: 0; text-align: center; }
-        .layout-14 #commendation-text { font-family: 'Lora', serif; font-style: italic; font-size: 1.4rem; letter-spacing: 1px; max-width: 650px; text-align: center; }
-
-        /* 15. Công Nghệ Tương Lai (Jura) */
-        .layout-15 { align-items: stretch; text-align: justify; font-family: 'Jura', sans-serif; padding: 0 50px; }
-        .layout-15 #commendation-title { display: flex; flex-direction: column; align-items: flex-end; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 10px; }
-        .layout-15 #commendation-title h2 { letter-spacing: 5px; text-align: right; }
-        .layout-15 #student-name-container { flex-direction: row; justify-content: space-between; margin-top: 20px; border-bottom: 1px dashed rgba(255,255,255,0.3); padding-bottom: 20px; }
-        .layout-15 #student-name { letter-spacing: 5px; text-align: left; }
-        .layout-15 #commendation-text { font-weight: 700; margin-top: 20px; background: rgba(255,255,255,0.1); padding: 15px; border-left: 5px solid var(--text-color); text-align: left; }
-
-        /* 16. Năng Động Vui Tươi (Comfortaa + Sriracha) */
-        .layout-16 { align-items: center; text-align: center; font-family: 'Comfortaa', cursive; }
-        .layout-16 #commendation-title { transform: rotate(-3deg); display: flex; flex-direction: column; align-items: center; }
-        .layout-16 #commendation-title h2 { font-family: 'Sriracha', cursive; text-align: center; }
-        .layout-16 #student-name-container { flex-direction: row; gap: 20px; transform: rotate(2deg); margin-top: 20px; }
-        .layout-16 #student-name { font-family: 'Sriracha', cursive; text-align: center; }
-        .layout-16 #commendation-text { margin-top: 30px; font-weight: 700; background: rgba(255,255,255,0.85); color: #111; padding: 15px 25px; border-radius: 30px; transform: rotate(-1deg); text-shadow: none; box-shadow: 0 10px 20px rgba(0,0,0,0.2); text-align: center; }
-
-        /* 17. Tạp Chí Thể Thao (Oswald) */
-        .layout-17 { align-items: center; text-align: center; font-family: 'Oswald', sans-serif; }
-        .layout-17 #commendation-title { display: flex; flex-direction: column; align-items: center; }
-        .layout-17 #commendation-title h2 { text-transform: uppercase; font-weight: 700; letter-spacing: 2px; text-align: center; }
-        .layout-17 #student-name-container { flex-direction: column; background: rgba(255,255,255,0.95); padding: 20px; width: 100%; transform: skewY(-2deg); margin: 30px 0; border-radius: 10px; box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
-        .layout-17 #student-name { color: #111 !important; text-shadow: none !important; letter-spacing: 5px; -webkit-text-fill-color: #111; text-align: center; }
-        .layout-17 #student-name-container > div { filter: invert(1); } /* Đảo màu badge lớp sang đen */
-        .layout-17 #commendation-text { font-family: 'Be Vietnam Pro', sans-serif; font-size: 1.4rem; max-width: 700px; text-transform: uppercase; font-weight: 700; text-align: center; }
-
-        /* 18. Mộng Mơ Lãng Mạn (Charm) */
-        .layout-18 { align-items: flex-end; text-align: right; padding-right: 50px; font-family: 'Lora', serif; }
-        .layout-18 #commendation-title { display: flex; flex-direction: column; align-items: flex-end; }
-        .layout-18 #commendation-title h2 { font-family: 'Charm', cursive; font-size: 3.5rem; text-transform: none; text-align: right; }
-        .layout-18 #student-name-container { flex-direction: row-reverse; margin: 20px 0; }
-        .layout-18 #student-name { font-family: 'Charm', cursive; text-transform: none; font-size: 6rem; text-align: right; }
-        .layout-18 #commendation-text { font-style: italic; opacity: 0.85; max-width: 600px; text-align: right; }
-
-        /* 19. Tương Phản Sắc Nét (Montserrat Black) */
-        .layout-19 { align-items: flex-start; text-align: left; padding-left: 50px; font-family: 'Montserrat', sans-serif; }
-        .layout-19 #commendation-title { display: flex; flex-direction: column; align-items: flex-start; }
-        .layout-19 #commendation-title h2 { font-weight: 900; font-size: 4rem; line-height: 1.1; margin-bottom: 5px; text-align: left; }
-        .layout-19 #student-name-container { flex-direction: row; border-left: 8px solid var(--text-color); padding-left: 20px; margin-left: 5px; }
-        .layout-19 #student-name { font-weight: 900; letter-spacing: -2px; text-align: left; }
-        .layout-19 #commendation-text { margin-top: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; max-width: 650px; text-align: left; }
-
-        /* 20. Phá Cách Bất Đối Xứng */
-        .layout-20 { align-items: stretch; font-family: 'Be Vietnam Pro', sans-serif; padding: 0 40px; }
-        .layout-20 #commendation-title { display: flex; flex-direction: column; align-items: flex-start; }
-        .layout-20 #commendation-title h2 { text-align: left; }
-        .layout-20 #student-name-container { flex-direction: row-reverse; justify-content: flex-start; margin-top: 15px; }
-        .layout-20 #student-name { text-align: right; }
-        .layout-20 #commendation-text { text-align: center; margin-top: 30px; font-style: italic; border: 1px dashed rgba(255,255,255,0.5); padding: 15px; border-radius: 10px; }
-
-        /* CÁC TEMPLATE (MẪU) - Bổ sung biến --bg-color-end để trộn màu fade đuôi ảnh */
-        
-        /* 1. Hoa Hướng Dương */
-        .tpl-1 { --bg-color-end: #fda085; background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
-        .tpl-1 .deco-1 { width: 500px; height: 500px; background: rgba(255,255,255,0.2); border-radius: 50%; top: -150px; left: -150px; }
-        .tpl-1 .deco-2 { width: 800px; height: 800px; background: rgba(255,165,0,0.3); border-radius: 50%; bottom: -300px; right: -300px; }
-
-        /* 2. Ngọn Đuốc Nhiệt Huyết */
-        .tpl-2 { --bg-color-end: #FF8C00; background: linear-gradient(to bottom, #8B0000, #FF4500, #FF8C00); }
-        .tpl-2 .deco-1 { width: 100%; height: 300px; background: linear-gradient(to top, transparent, rgba(255,215,0,0.3)); bottom: 0; left: 0; }
-        .tpl-2 .deco-2 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,255,0,0.2) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); }
-
-        /* 3. Cuốn Sách Tri Thức (Nâu/Vàng) */
-        .tpl-3 { --bg-color-end: #F4A460; background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #F4A460 100%); }
-        .tpl-3 .deco-1 { width: 200vw; height: 500px; background: rgba(255,255,255,0.1); transform: rotate(-10deg); top: -200px; left: -50%; }
-        .tpl-3 .deco-2 { width: 400px; height: 400px; border: 20px solid rgba(255,215,0,0.2); border-radius: 20px; bottom: 50px; right: 50px; transform: rotate(15deg); }
-
-        /* 4. Tương Lai Trẻ (Xanh Dương) */
-        .tpl-4 { --bg-color-end: #24243e; background: linear-gradient(45deg, #0f0c29, #302b63, #24243e); }
-        .tpl-4 .deco-1 { width: 300px; height: 300px; border-radius: 50%; box-shadow: inset 0 0 50px #00f2fe; top: 100px; right: 100px; }
-        .tpl-4 .deco-2 { width: 200px; height: 200px; border-radius: 50%; box-shadow: inset 0 0 50px #4facfe; bottom: 150px; left: 100px; }
-
-        /* 5. Tự Hào Truyền Thống (Đỏ cờ/Vàng sao) */
-        .tpl-5 { --bg-color-end: #a40000; background: linear-gradient(135deg, #da251d 0%, #a40000 100%); }
-        .tpl-5 .deco-1 { width: 800px; height: 800px; background: radial-gradient(circle, rgba(255,255,0,0.15) 0%, transparent 60%); top: -200px; right: -200px; }
-        .tpl-5 .deco-2 { width: 100%; height: 20px; background: #ffff00; bottom: 100px; left: 0; opacity: 0.8; }
-
-        /* 6. Mầm Non (Xanh Lá) */
-        .tpl-6 { --bg-color-end: #38ef7d; background: linear-gradient(120deg, #11998e 0%, #38ef7d 100%); }
-        .tpl-6 .deco-1 { width: 400px; height: 400px; background: rgba(255,255,255,0.2); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; top: -50px; left: -100px; }
-        .tpl-6 .deco-2 { width: 500px; height: 500px; background: rgba(255,255,255,0.1); border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; bottom: -100px; right: -150px; }
-
-        /* 7. Bầu Trời Sao (Tím/Đen) */
-        .tpl-7 { --bg-color-end: #000000; background: radial-gradient(circle at top right, #4B0082, #000000); }
-        .tpl-7 .deco-1 { width: 2px; height: 2px; box-shadow: 100px 200px white, 300px 500px white, 500px 100px white, 800px 600px white, 900px 200px white, 200px 800px white; border-radius: 50%; }
-        .tpl-7 .deco-2 { width: 600px; height: 600px; border: 2px solid rgba(255,255,255,0.1); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-
-        /* 8. Hoàng Hôn Nhiệt Đới */
-        .tpl-8 { --bg-color-end: #feb47b; background: linear-gradient(to right, #ff7e5f, #feb47b); }
-        .tpl-8 .deco-1 { width: 700px; height: 700px; background: rgba(255,255,255,0.15); border-radius: 50%; bottom: -350px; left: -100px; }
-        .tpl-8 .deco-2 { width: 300px; height: 300px; background: rgba(255,255,255,0.2); border-radius: 50%; top: 50px; right: -50px; }
-
-        /* 9. Đại Dương Mênh Mông */
-        .tpl-9 { --bg-color-end: #00008B; background: linear-gradient(to bottom, #00BFFF, #00008B); }
-        .tpl-9 .deco-1 { width: 120%; height: 400px; background: rgba(255,255,255,0.1); border-radius: 50%; bottom: -200px; left: -10%; }
-        .tpl-9 .deco-2 { width: 150%; height: 300px; background: rgba(255,255,255,0.05); border-radius: 50%; bottom: -100px; left: -25%; }
-
-        /* 10. Thanh Lịch (Trắng/Xám nhạt) */
-        .tpl-10 { --bg-color-end: #ffffff; background: linear-gradient(to top, #dfe9f3 0%, white 100%); }
-        /* Template này cần màu chữ tối mặc định, sẽ được xử lý bằng JS khi chọn */
-        .tpl-10 .deco-1 { width: 600px; height: 600px; border: 10px solid #f1f5f9; border-radius: 50%; top: -200px; right: -200px; }
-        .tpl-10 .deco-2 { width: 400px; height: 400px; border: 10px solid #f1f5f9; border-radius: 50%; bottom: -150px; left: -150px; }
-
-        /* 11. Cyber Neon (Đen/Hồng/Xanh) */
-        .tpl-11 { --bg-color-end: #0b0f19; background: #0b0f19; }
-        .tpl-11 .deco-1 { width: 100%; height: 200px; top: 0; left: 0; background: repeating-linear-gradient(45deg, #ff007a15, #ff007a15 10px, transparent 10px, transparent 20px); border-bottom: 3px solid #ff007a; clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%); }
-        .tpl-11 .deco-2 { width: 100%; height: 250px; bottom: 0; left: 0; background: repeating-linear-gradient(-45deg, #00f0ff15, #00f0ff15 10px, transparent 10px, transparent 20px); border-top: 3px solid #00f0ff; clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%); }
-
-        /* 12. Vàng Đen Sang Trọng (Elegant Gold) */
-        .tpl-12 { --bg-color-end: #1a1a1a; background: #1a1a1a; }
-        .tpl-12 .deco-1 { width: 100%; height: 300px; top: 0; left: 0; background: linear-gradient(135deg, #d4af37 0%, #855c0b 100%); clip-path: polygon(0 0, 100% 0, 0 100%); }
-        .tpl-12 .deco-2 { width: 100%; height: 300px; bottom: 0; right: 0; background: linear-gradient(-45deg, #d4af37 0%, #855c0b 100%); clip-path: polygon(100% 100%, 0 100%, 100% 0); }
-
-        /* 13. Sóng Âm (Trắng/Xanh/Tím) */
-        .tpl-13 { --bg-color-end: #d9e2ec; background: linear-gradient(to bottom, #f0f4f8, #d9e2ec); }
-        .tpl-13 .deco-1 { width: 150%; height: 200px; top: -50px; left: -25%; background: linear-gradient(90deg, #4a90e2, #50e3c2); border-radius: 50%; opacity: 0.9; }
-        .tpl-13 .deco-2 { width: 150%; height: 200px; bottom: -50px; left: -25%; background: linear-gradient(90deg, #9013fe, #ff00a0); border-radius: 50%; opacity: 0.9; }
-
-        /* 14. Trừu Tượng Polygon */
-        .tpl-14 { --bg-color-end: #fdfbfb; background: #fdfbfb; }
-        .tpl-14 .deco-1 { width: 450px; height: 450px; top: -100px; right: -100px; background: linear-gradient(45deg, #ff9a9e, #fecfef); clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); opacity: 0.8; }
-        .tpl-14 .deco-2 { width: 400px; height: 400px; bottom: -50px; left: -50px; background: linear-gradient(45deg, #a18cd1, #fbc2eb); clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); opacity: 0.8; }
-
-        /* 15. Doanh Nghiệp (Corporate Stripes) */
-        .tpl-15 { --bg-color-end: #ffffff; background: #ffffff; }
-        .tpl-15 .deco-1 { width: 100%; height: 25px; top: 30px; left: 0; background: #0052d4; box-shadow: 0 40px 0 0 #4364f7, 0 80px 0 0 #6fb1fc; opacity: 0.85;}
-        .tpl-15 .deco-2 { width: 100%; height: 25px; bottom: 110px; left: 0; background: #6fb1fc; box-shadow: 0 40px 0 0 #4364f7, 0 80px 0 0 #0052d4; opacity: 0.85;}
-
-        /* 16. Kính Mờ Kéo Dài (Glass blobs) */
-        .tpl-16 { --bg-color-end: #0f172a; background: #0f172a; }
-        .tpl-16 .deco-1 { width: 600px; height: 300px; top: 0; left: 50%; transform: translateX(-50%); background: #38bdf8; filter: blur(90px); opacity: 0.5; }
-        .tpl-16 .deco-2 { width: 800px; height: 300px; bottom: 0; left: 50%; transform: translateX(-50%); background: #a855f7; filter: blur(100px); opacity: 0.5; }
-
-        /* 17. Lưới Chéo Cổ Điển (Retro Perspective) */
-        .tpl-17 { --bg-color-end: #374151; background: linear-gradient(to bottom, #111827, #374151); }
-        .tpl-17 .deco-1 { width: 100%; height: 250px; bottom: 0; left: 0; background-image: linear-gradient(transparent 90%, rgba(52, 211, 153, 0.4) 100%), linear-gradient(90deg, transparent 90%, rgba(52, 211, 153, 0.4) 100%); background-size: 30px 30px; transform: perspective(500px) rotateX(60deg); transform-origin: bottom; border-top: 2px solid #34d399; }
-        .tpl-17 .deco-2 { width: 100%; height: 150px; top: 0; left: 0; background: linear-gradient(to bottom, #34d39933, transparent); border-bottom: 2px dashed #34d39955; }
-
-        /* 18. Lượn Sóng Vector (Pastel Waves) */
-        .tpl-18 { --bg-color-end: #fff0f5; background: #fff0f5; }
-        .tpl-18 .deco-1 { width: 100%; height: 250px; top: 0; left: 0; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ff9a9e" fill-opacity="1" d="M0,160L48,144C96,128,192,96,288,106.7C384,117,480,171,576,192C672,213,768,203,864,181.3C960,160,1056,128,1152,117.3C1248,107,1344,117,1392,122.7L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>') no-repeat top center; background-size: cover; }
-        .tpl-18 .deco-2 { width: 100%; height: 250px; bottom: 0; left: 0; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23fecfef" fill-opacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,133.3C672,117,768,139,864,165.3C960,192,1056,224,1152,224C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom center; background-size: cover; }
-
-        /* 19. Nhiệt Đới (Cắt Vát Mềm) */
-        .tpl-19 { --bg-color-end: #e8f5e9; background: #e8f5e9; }
-        .tpl-19 .deco-1 { width: 100%; height: 250px; top: 0; left: 0; background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%); clip-path: polygon(0 0, 100% 0, 100% 40%, 0 100%); }
-        .tpl-19 .deco-2 { width: 100%; height: 250px; bottom: 0; right: 0; background: linear-gradient(135deg, #8bc34a 0%, #558b2f 100%); clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 60%); }
-
-        /* 20. Khối 3D Cạnh Sắc (Sharp 3D Edges) */
-        .tpl-20 { --bg-color-end: #2b2b2b; background: #2b2b2b; }
-        .tpl-20 .deco-1 { width: 0; height: 0; border-left: 540px solid transparent; border-right: 540px solid transparent; border-top: 250px solid #e11d48; top: 0; left: 0; opacity: 0.9; filter: drop-shadow(0 20px 10px rgba(0,0,0,0.5)); }
-        .tpl-20 .deco-2 { width: 0; height: 0; border-left: 540px solid transparent; border-right: 540px solid transparent; border-bottom: 250px solid #4f46e5; bottom: 0; left: 0; opacity: 0.9; filter: drop-shadow(0 -20px 10px rgba(0,0,0,0.5)); }
-
-        /* --- 4 TEMPLATE MỚI (DẠNG ẢNH NỀN THỰC TẾ) --- */
-        
-        /* 21. Vinh Quang Sân Khấu (Golden Bokeh) */
-        .tpl-21 { --bg-color-end: #1a1005; background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(26,16,5,0.95)), url('https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80') center/cover; }
-        
-        /* 22. Thư Viện Cổ Điển (Classic Library) */
-        .tpl-22 { --bg-color-end: #1c1512; background: linear-gradient(to bottom, rgba(28,21,18,0.4), rgba(28,21,18,0.98)), url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80') center/cover; }
-        
-        /* 23. Bầu Trời Bình Minh (Bright Sky) */
-        .tpl-23 { --bg-color-end: #e0f2fe; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(224,242,254,1)), url('https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80') center/cover; }
-        
-        /* 24. Không Gian Nghệ Thuật (Fluid Abstract) */
-        .tpl-24 { --bg-color-end: #0f172a; background: linear-gradient(to bottom, rgba(15,23,42,0.3), rgba(15,23,42,0.98)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80') center/cover; }
+        /* THEMES */
+        .tpl-1 { --bg-color-end: #fda085; background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); } .tpl-1 .deco-1 { width: 500px; height: 500px; background: rgba(255,255,255,0.2); border-radius: 50%; top: -150px; left: -150px; } .tpl-1 .deco-2 { width: 800px; height: 800px; background: rgba(255,165,0,0.3); border-radius: 50%; bottom: -300px; right: -300px; }
+        .tpl-2 { --bg-color-end: #FF8C00; background: linear-gradient(to bottom, #8B0000, #FF4500, #FF8C00); } .tpl-2 .deco-1 { width: 100%; height: 300px; background: linear-gradient(to top, transparent, rgba(255,215,0,0.3)); bottom: 0; left: 0; } .tpl-2 .deco-2 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,255,0,0.2) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .tpl-3 { --bg-color-end: #F4A460; background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #F4A460 100%); } .tpl-3 .deco-1 { width: 200vw; height: 500px; background: rgba(255,255,255,0.1); transform: rotate(-10deg); top: -200px; left: -50%; } .tpl-3 .deco-2 { width: 400px; height: 400px; border: 20px solid rgba(255,215,0,0.2); border-radius: 20px; bottom: 50px; right: 50px; transform: rotate(15deg); }
+        .tpl-4 { --bg-color-end: #24243e; background: linear-gradient(45deg, #0f0c29, #302b63, #24243e); } .tpl-4 .deco-1 { width: 300px; height: 300px; border-radius: 50%; box-shadow: inset 0 0 50px #00f2fe; top: 100px; right: 100px; } .tpl-4 .deco-2 { width: 200px; height: 200px; border-radius: 50%; box-shadow: inset 0 0 50px #4facfe; bottom: 150px; left: 100px; }
+        .tpl-5 { --bg-color-end: #a40000; background: linear-gradient(135deg, #da251d 0%, #a40000 100%); } .tpl-5 .deco-1 { width: 800px; height: 800px; background: radial-gradient(circle, rgba(255,255,0,0.15) 0%, transparent 60%); top: -200px; right: -200px; } .tpl-5 .deco-2 { width: 100%; height: 20px; background: #ffff00; bottom: 100px; left: 0; opacity: 0.8; }
+        .tpl-6 { --bg-color-end: #38ef7d; background: linear-gradient(120deg, #11998e 0%, #38ef7d 100%); } .tpl-6 .deco-1 { width: 400px; height: 400px; background: rgba(255,255,255,0.2); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; top: -50px; left: -100px; } .tpl-6 .deco-2 { width: 500px; height: 500px; background: rgba(255,255,255,0.1); border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; bottom: -100px; right: -150px; }
+        .tpl-7 { --bg-color-end: #000000; background: radial-gradient(circle at top right, #4B0082, #000000); } .tpl-7 .deco-1 { width: 2px; height: 2px; box-shadow: 100px 200px white, 300px 500px white, 500px 100px white, 800px 600px white, 900px 200px white, 200px 800px white; border-radius: 50%; } .tpl-7 .deco-2 { width: 600px; height: 600px; border: 2px solid rgba(255,255,255,0.1); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .tpl-8 { --bg-color-end: #feb47b; background: linear-gradient(to right, #ff7e5f, #feb47b); } .tpl-8 .deco-1 { width: 700px; height: 700px; background: rgba(255,255,255,0.15); border-radius: 50%; bottom: -350px; left: -100px; } .tpl-8 .deco-2 { width: 300px; height: 300px; background: rgba(255,255,255,0.2); border-radius: 50%; top: 50px; right: -50px; }
+        .tpl-9 { --bg-color-end: #00008B; background: linear-gradient(to bottom, #00BFFF, #00008B); } .tpl-9 .deco-1 { width: 120%; height: 400px; background: rgba(255,255,255,0.1); border-radius: 50%; bottom: -200px; left: -10%; } .tpl-9 .deco-2 { width: 150%; height: 300px; background: rgba(255,255,255,0.05); border-radius: 50%; bottom: -100px; left: -25%; }
+        .tpl-10 { --bg-color-end: #ffffff; background: linear-gradient(to top, #dfe9f3 0%, white 100%); } .tpl-10 .deco-1 { width: 600px; height: 600px; border: 10px solid #f1f5f9; border-radius: 50%; top: -200px; right: -200px; } .tpl-10 .deco-2 { width: 400px; height: 400px; border: 10px solid #f1f5f9; border-radius: 50%; bottom: -150px; left: -150px; }
+        .tpl-11 { --bg-color-end: #0b0f19; background: #0b0f19; } .tpl-11 .deco-1 { width: 100%; height: 200px; top: 0; left: 0; background: repeating-linear-gradient(45deg, #ff007a15, #ff007a15 10px, transparent 10px, transparent 20px); border-bottom: 3px solid #ff007a; clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%); } .tpl-11 .deco-2 { width: 100%; height: 250px; bottom: 0; left: 0; background: repeating-linear-gradient(-45deg, #00f0ff15, #00f0ff15 10px, transparent 10px, transparent 20px); border-top: 3px solid #00f0ff; clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%); }
+        .tpl-12 { --bg-color-end: #1a1a1a; background: #1a1a1a; } .tpl-12 .deco-1 { width: 100%; height: 300px; top: 0; left: 0; background: linear-gradient(135deg, #d4af37 0%, #855c0b 100%); clip-path: polygon(0 0, 100% 0, 0 100%); } .tpl-12 .deco-2 { width: 100%; height: 300px; bottom: 0; right: 0; background: linear-gradient(-45deg, #d4af37 0%, #855c0b 100%); clip-path: polygon(100% 100%, 0 100%, 100% 0); }
+        .tpl-13 { --bg-color-end: #d9e2ec; background: linear-gradient(to bottom, #f0f4f8, #d9e2ec); } .tpl-13 .deco-1 { width: 150%; height: 200px; top: -50px; left: -25%; background: linear-gradient(90deg, #4a90e2, #50e3c2); border-radius: 50%; opacity: 0.9; } .tpl-13 .deco-2 { width: 150%; height: 200px; bottom: -50px; left: -25%; background: linear-gradient(90deg, #9013fe, #ff00a0); border-radius: 50%; opacity: 0.9; }
+        .tpl-14 { --bg-color-end: #fdfbfb; background: #fdfbfb; } .tpl-14 .deco-1 { width: 450px; height: 450px; top: -100px; right: -100px; background: linear-gradient(45deg, #ff9a9e, #fecfef); clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); opacity: 0.8; } .tpl-14 .deco-2 { width: 400px; height: 400px; bottom: -50px; left: -50px; background: linear-gradient(45deg, #a18cd1, #fbc2eb); clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); opacity: 0.8; }
+        .tpl-15 { --bg-color-end: #ffffff; background: #ffffff; } .tpl-15 .deco-1 { width: 100%; height: 25px; top: 30px; left: 0; background: #0052d4; box-shadow: 0 40px 0 0 #4364f7, 0 80px 0 0 #6fb1fc; opacity: 0.85;} .tpl-15 .deco-2 { width: 100%; height: 25px; bottom: 110px; left: 0; background: #6fb1fc; box-shadow: 0 40px 0 0 #4364f7, 0 80px 0 0 #0052d4; opacity: 0.85;}
+        .tpl-16 { --bg-color-end: #0f172a; background: #0f172a; } .tpl-16 .deco-1 { width: 600px; height: 300px; top: 0; left: 50%; transform: translateX(-50%); background: #38bdf8; filter: blur(90px); opacity: 0.5; } .tpl-16 .deco-2 { width: 800px; height: 300px; bottom: 0; left: 50%; transform: translateX(-50%); background: #a855f7; filter: blur(100px); opacity: 0.5; }
+        .tpl-17 { --bg-color-end: #374151; background: linear-gradient(to bottom, #111827, #374151); } .tpl-17 .deco-1 { width: 100%; height: 250px; bottom: 0; left: 0; background-image: linear-gradient(transparent 90%, rgba(52, 211, 153, 0.4) 100%), linear-gradient(90deg, transparent 90%, rgba(52, 211, 153, 0.4) 100%); background-size: 30px 30px; transform: perspective(500px) rotateX(60deg); transform-origin: bottom; border-top: 2px solid #34d399; } .tpl-17 .deco-2 { width: 100%; height: 150px; top: 0; left: 0; background: linear-gradient(to bottom, #34d39933, transparent); border-bottom: 2px dashed #34d39955; }
+        .tpl-18 { --bg-color-end: #fff0f5; background: #fff0f5; } .tpl-18 .deco-1 { width: 100%; height: 250px; top: 0; left: 0; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ff9a9e" fill-opacity="1" d="M0,160L48,144C96,128,192,96,288,106.7C384,117,480,171,576,192C672,213,768,203,864,181.3C960,160,1056,128,1152,117.3C1248,107,1344,117,1392,122.7L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>') no-repeat top center; background-size: cover; } .tpl-18 .deco-2 { width: 100%; height: 250px; bottom: 0; left: 0; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23fecfef" fill-opacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,133.3C672,117,768,139,864,165.3C960,192,1056,224,1152,224C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom center; background-size: cover; }
+        .tpl-19 { --bg-color-end: #e8f5e9; background: #e8f5e9; } .tpl-19 .deco-1 { width: 100%; height: 250px; top: 0; left: 0; background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%); clip-path: polygon(0 0, 100% 0, 100% 40%, 0 100%); } .tpl-19 .deco-2 { width: 100%; height: 250px; bottom: 0; right: 0; background: linear-gradient(135deg, #8bc34a 0%, #558b2f 100%); clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 60%); }
+        .tpl-20 { --bg-color-end: #2b2b2b; background: #2b2b2b; } .tpl-20 .deco-1 { width: 0; height: 0; border-left: 540px solid transparent; border-right: 540px solid transparent; border-top: 250px solid #e11d48; top: 0; left: 0; opacity: 0.9; filter: drop-shadow(0 20px 10px rgba(0,0,0,0.5)); } .tpl-20 .deco-2 { width: 0; height: 0; border-left: 540px solid transparent; border-right: 540px solid transparent; border-bottom: 250px solid #4f46e5; bottom: 0; left: 0; opacity: 0.9; filter: drop-shadow(0 -20px 10px rgba(0,0,0,0.5)); }
+        .tpl-21 { --bg-color-end: #1a1005; background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(26,16,5,0.95)), url('https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; }
+        .tpl-22 { --bg-color-end: #1c1512; background: linear-gradient(to bottom, rgba(28,21,18,0.4), rgba(28,21,18,0.98)), url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; }
+        .tpl-23 { --bg-color-end: #e0f2fe; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(224,242,254,1)), url('https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; }
+        .tpl-24 { --bg-color-end: #0f172a; background: linear-gradient(to bottom, rgba(15,23,42,0.3), rgba(15,23,42,0.98)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; }
 
         /* CSS cho Scaler để hiển thị vừa màn hình */
         #poster-viewport {
@@ -661,7 +447,7 @@
                 <div id="poster-scaler">
                     
                     <!-- BẮT ĐẦU VÙNG POSTER CHÍNH -->
-                    <div id="poster-container" class="tpl-1" data-image-mode="11">
+                    <div id="poster-container" class="tpl-1" data-image-mode="11" data-orientation="portrait">
                         <!-- Đồ họa trang trí nền -->
                         <div class="deco deco-1"></div>
                         <div class="deco deco-2"></div>
@@ -675,7 +461,7 @@
                             <!-- TOP SECTION: Chứa tên trường ở trên cùng -->
                             <div class="top-section text-block">
                                 <div class="w-full flex flex-col items-center">
-                                    <h3 id="school-name" contenteditable="true" spellcheck="false" class="text-3xl font-bold tracking-widest uppercase opacity-100 text-shadow-heavy m-0">
+                                    <h3 id="school-name" contenteditable="true" spellcheck="false" class="text-[30px] font-bold tracking-widest uppercase opacity-100 text-shadow-heavy m-0">
                                         TRƯỜNG THPT NGUYỄN HỮU CẢNH
                                     </h3>
                                 </div>
@@ -752,14 +538,14 @@
                                     </h2>
                                 </div>
 
-                                <!-- Cụm Tên và Lớp: Được khóa cứng flex-nowrap để tránh nhảy dòng -->
-                                <div id="student-name-container" class="flex items-center justify-center gap-8 mb-6 w-full" style="flex-wrap: nowrap;">
+                                <!-- Cụm Tên và Lớp -->
+                                <div id="student-name-container" class="flex items-center gap-8 mb-6 w-full" style="flex-wrap: wrap; justify-content: center;">
                                     <h1 id="student-name" contenteditable="true" spellcheck="false" class="text-[64px] font-black uppercase tracking-tighter text-shadow-heavy name-style-1 flex-shrink-0 leading-none">
                                         NGUYỄN VĂN A
                                     </h1>
                                     
                                     <!-- Khung Lớp bo tròn (dạng huy hiệu tròn) -->
-                                    <div class="flex flex-col items-center justify-center bg-white bg-opacity-20 backdrop-blur-md rounded-full w-[130px] h-[130px] border-[3px] border-white border-opacity-40 shadow-2xl flex-shrink-0">
+                                    <div id="class-badge" class="flex flex-col items-center justify-center bg-white bg-opacity-20 backdrop-blur-md rounded-full w-[130px] h-[130px] border-[3px] border-white border-opacity-40 shadow-2xl flex-shrink-0">
                                         <!-- Icon Mũ cử nhân -->
                                         <svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-md mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path d="M12 14l9-5-9-5-9 5 9 5z" />
@@ -768,12 +554,12 @@
                                         </svg>
                                         
                                         <!-- Chữ Lớp -->
-                                        <h4 contenteditable="true" spellcheck="false" class="text-3xl font-bold tracking-wider text-shadow m-0 leading-none">
+                                        <h4 contenteditable="true" spellcheck="false" class="text-[30px] font-bold tracking-wider text-shadow m-0 leading-none">
                                             10A8
                                         </h4>
                                     </div>
                                 </div>
-                                <p id="commendation-text" contenteditable="true" spellcheck="false" class="text-2xl font-medium italic opacity-90 text-shadow max-w-3xl leading-relaxed">
+                                <p id="commendation-text" contenteditable="true" spellcheck="false" class="text-[24px] font-medium italic opacity-90 text-shadow max-w-3xl leading-relaxed">
                                     "Vì những thành tích xuất sắc, nỗ lực không ngừng trong học tập và phong trào thi đua của lớp."
                                 </p>
                             </div>
@@ -790,9 +576,24 @@
         <aside class="w-full lg:w-1/3 bg-white rounded-xl shadow-lg p-6 mb-8 lg:mb-0 lg:sticky lg:top-6 order-2 lg:order-1">
             <h2 class="text-xl font-bold mb-6 border-b pb-2">Tùy Chỉnh Poster</h2>
             
+            <!-- CHỌN HƯỚNG POSTER -->
+            <div class="mb-6">
+                <label class="block text-sm font-bold text-indigo-700 mb-2">1. Hướng Poster (Bố cục)</label>
+                <div class="flex gap-3">
+                    <button onclick="changeOrientation('portrait')" id="btn-portrait" class="flex-1 bg-indigo-600 text-white font-semibold py-2.5 px-4 rounded-lg shadow-sm transition border border-indigo-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                        Khổ Dọc (4:5)
+                    </button>
+                    <button onclick="changeOrientation('landscape')" id="btn-landscape" class="flex-1 bg-white text-gray-600 hover:bg-gray-50 font-semibold py-2.5 px-4 rounded-lg shadow-sm transition border border-gray-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto mb-1 transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                        Khổ Ngang (16:9)
+                    </button>
+                </div>
+            </div>
+
             <!-- Upload Ảnh (Luôn hiện để thao tác nhanh) -->
             <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">1. Tải ảnh học sinh lên</label>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">2. Tải ảnh học sinh lên</label>
                 <div class="flex items-center justify-center w-full">
                     <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-indigo-300 border-dashed rounded-lg cursor-pointer bg-indigo-50 hover:bg-indigo-100 transition">
                         <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -809,7 +610,7 @@
 
             <!-- CHỨC NĂNG THÔNG MINH (TRỘN NGẪU NHIÊN) - Đưa ra ngoài -->
             <div class="mb-6">
-                <label class="block text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-3">2. 🪄 Phép màu ngẫu nhiên</label>
+                <label class="block text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-3">3. 🪄 Phép màu ngẫu nhiên</label>
                 <button onclick="randomizeDesign()" class="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
@@ -821,7 +622,7 @@
 
             <!-- Gợi ý Lời Tuyên Dương - Đưa ra ngoài -->
             <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">3. Gợi ý Lời tuyên dương</label>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">4. Gợi ý Lời tuyên dương</label>
                 <select id="quote-select" onchange="updateQuote(this.value)" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5">
                     <option value="">-- Chọn một gợi ý (Hoặc tự gõ) --</option>
                     <option value="Vì những thành tích xuất sắc, nỗ lực không ngừng trong học tập và phong trào thi đua của lớp.">Thành tích toàn diện (Mặc định)</option>
@@ -857,7 +658,7 @@
             <div id="advanced-options" class="hidden flex-col gap-2">
                 <!-- Chọn Kiểu Khung Ảnh -->
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">4. Chọn kiểu khung ảnh</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">5. Chọn kiểu khung ảnh</label>
                     <select id="mode-select" onchange="changeImageMode(this.value)" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5">
                         <optgroup label="Khung ảnh cơ bản">
                             <option value="1">Tròn tiêu chuẩn (Vừa)</option>
@@ -885,44 +686,51 @@
 
                 <!-- Chọn màu chữ -->
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">5. Chọn màu chữ</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">6. Chọn màu chữ</label>
                     <div class="flex items-center gap-3">
                         <input type="color" id="color-picker" value="#ffffff" class="w-12 h-12 rounded cursor-pointer border-0 p-0">
                         <span class="text-sm text-gray-600">Màu hiện tại (Click để đổi)</span>
-                        <optgroup label="Giấy Khen Vinh Danh (Mới)">
-                            <option value="12">🏆 Vòng Nguyệt Quế Vàng (Lấp lánh)</option>
-                            <option value="13">🥈 Vòng Nguyệt Quế Bạc (Lấp lánh)</option>
-                            <option value="14">💎 Vòng Nguyệt Quế Kim Cương (Phát sáng)</option>
-                            <option value="15">🌸 Vòng Nguyệt Quế Hoa Hồng (Độc đáo)</option>
-                        </optgroup>
-                    </select>
+                    </div>
                 </div>
 
-                <!-- Chọn màu chữ -->
+                <!-- BỐ CỤC CHỮ NGHỆ THUẬT -->
                 <div class="mb-6">
                     <label class="block text-sm font-bold text-indigo-700 mb-2">✦ Bố cục chữ nghệ thuật (Tổng thể)</label>
                     <select id="text-layout-select" onchange="changeTextLayout(this.value)" class="w-full bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-medium shadow-sm">
-                        <option value="1">✨ Chuẩn mực (Mặc định)</option>
-                        <option value="2">📰 Tạp chí Thời trang (Căn trái, Lora & Oswald)</option>
-                        <option value="3">🎬 Điện ảnh (Căn phải, Jura Tech)</option>
-                        <option value="4">🏛️ Cổ điển Á Đông (Prata, Khoảng cách hẹp)</option>
-                        <option value="5">🖋️ Tự do Thơ ca (Pattaya, Bố cục lệch)</option>
-                        <option value="6">⬜ Tối giản Hiện đại (Be Vietnam Pro, Sạch sẽ)</option>
-                        <option value="7">🌸 Nàng thơ (Charm, Mềm mại, Căn trái)</option>
-                        <option value="8">🏗️ Khối Kiến trúc (Oswald, Ép vuông vức)</option>
-                        <option value="9">😊 Thân thiện & Tròn trịa (Comfortaa)</option>
-                        <option value="10">📻 Retro Nghệ thuật (Yeseva One & Sriracha)</option>
-                        <!-- 10 Lựa chọn mới -->
-                        <option value="11">🤖 Cyberpunk Đột Phá (Jura & Righteous)</option>
-                        <option value="12">📜 Thư Báo Cổ Điển (Prata, Viền kép)</option>
-                        <option value="13">⬛ Brutalism To Bản (Bebas, Căn trái)</option>
-                        <option value="14">🕊️ Thanh Lịch Thiệp Cưới (Cinzel + Dancing)</option>
-                        <option value="15">🌐 Công Nghệ Tương Lai (Jura, Căn phải)</option>
-                        <option value="16">🎈 Năng Động Vui Tươi (Comfortaa + Sriracha)</option>
-                        <option value="17">🏅 Tạp Chí Thể Thao (Oswald, Nền nổi bật)</option>
-                        <option value="18">💕 Mộng Mơ Lãng Mạn (Charm, Căn lệch)</option>
-                        <option value="19">🔲 Tương Phản Sắc Nét (Montserrat Black)</option>
-                        <option value="20">🎭 Phá Cách Bất Đối Xứng (Trái phải đan xen)</option>
+                        <optgroup label="Khổ Dọc (Portrait) 1 - 20">
+                            <option value="1">✨ Chuẩn mực (Mặc định)</option>
+                            <option value="2">📰 Tạp chí Thời trang (Căn trái)</option>
+                            <option value="3">🎬 Điện ảnh (Căn phải)</option>
+                            <option value="4">🏛️ Cổ điển Á Đông</option>
+                            <option value="5">🖋️ Tự do Thơ ca</option>
+                            <option value="6">⬜ Tối giản Hiện đại</option>
+                            <option value="7">🌸 Nàng thơ</option>
+                            <option value="8">🏗️ Khối Kiến trúc</option>
+                            <option value="9">😊 Thân thiện & Tròn trịa</option>
+                            <option value="10">📻 Retro Nghệ thuật</option>
+                            <option value="11">🤖 Cyberpunk Đột Phá</option>
+                            <option value="12">📜 Thư Báo Cổ Điển</option>
+                            <option value="13">⬛ Brutalism To Bản</option>
+                            <option value="14">🕊️ Thanh Lịch Thiệp Cưới</option>
+                            <option value="15">🌐 Công Nghệ Tương Lai</option>
+                            <option value="16">🎈 Năng Động Vui Tươi</option>
+                            <option value="17">🏅 Tạp Chí Thể Thao</option>
+                            <option value="18">💕 Mộng Mơ Lãng Mạn</option>
+                            <option value="19">🔲 Tương Phản Sắc Nét</option>
+                            <option value="20">🎭 Phá Cách Bất Đối Xứng</option>
+                        </optgroup>
+                        <optgroup label="Khổ Ngang (Landscape) 21 - 30">
+                            <option value="21">🎞️ Điện ảnh Góc rộng (Trải dài)</option>
+                            <option value="22">📰 Báo chí Chia đôi (Trái-Phải)</option>
+                            <option value="23">👻 Watermark Khổng lồ (Tên in chìm)</option>
+                            <option value="24">⬅️ Căn Trái Tối Giản</option>
+                            <option value="25">➡️ Căn Phải Tối Giản</option>
+                            <option value="26">👑 Sang Trọng Dãn Cách</option>
+                            <option value="27">🏅 Block Thể Thao Ngang</option>
+                            <option value="28">📜 Thơ Ca Lãng Mạn Mở Rộng</option>
+                            <option value="29">⚡ Banner Đột Phá (Ẩn chữ nhỏ)</option>
+                            <option value="30">🔲 Khung Viền Hiện Đại</option>
+                        </optgroup>
                     </select>
                 </div>
 
@@ -980,7 +788,7 @@
 
                 <!-- Chọn Template -->
                 <div class="mb-8">
-                    <label class="block text-sm font-semibold text-gray-700 mb-3">6. Chọn mẫu giao diện (Chủ đề)</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">7. Chọn mẫu giao diện (Chủ đề)</label>
                     <div class="grid grid-cols-2 gap-3" id="template-buttons">
                         <button onclick="changeTemplate(1, '#ffffff')" class="tpl-btn bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-medium py-2 px-2 rounded shadow hover:shadow-md transition text-sm">🌻 Hướng Dương</button>
                         <button onclick="changeTemplate(2, '#ffffff')" class="tpl-btn bg-gradient-to-r from-red-700 to-orange-500 text-white font-medium py-2 px-2 rounded shadow hover:shadow-md transition text-sm">🔥 Ngọn Đuốc</button>
@@ -1014,14 +822,36 @@
                 </div>
             </div> <!-- Kết thúc vùng menu ẩn -->
 
-            <!-- Nút Xuất Ảnh -->
-            <button id="export-btn" onclick="exportImage()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-lg py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 flex justify-center items-center gap-2 mt-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                Tải Xuống (Chuẩn 4K)
-            </button>
-            <p class="text-xs text-center text-gray-500 mt-3 mb-6">Ảnh được xuất tỷ lệ 4:5, độ phân giải rất cao, hoàn hảo để đăng Facebook không bị vỡ ảnh.</p>
+            <!-- MỚI: TÍNH NĂNG LƯU MẪU & GHI CHÚ -->
+            <div class="mb-6 bg-indigo-50 p-4 rounded-xl border border-indigo-100 shadow-sm">
+                <label class="block text-sm font-bold text-indigo-800 mb-2">🔖 Lưu Mẫu & Ghi Chú</label>
+                <textarea id="template-notes" rows="2" class="w-full bg-white border border-indigo-200 text-gray-900 text-sm rounded-lg p-2.5 mb-3 focus:ring-indigo-500 focus:border-indigo-500 outline-none" placeholder="Ví dụ: Mẫu dùng cho tháng 10, học sinh lớp 10A8..."></textarea>
+                <div class="flex gap-2">
+                    <button onclick="saveTemplate()" class="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold py-2 rounded-lg transition shadow-sm flex justify-center items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586L7.707 10.293zM11 3a1 1 0 01-2 0v8.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V3z" /></svg>
+                        Lưu Cấu Hình
+                    </button>
+                    <button onclick="loadTemplate()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2 rounded-lg transition shadow-sm flex justify-center items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414zM11 12a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>
+                        Khôi Phục
+                    </button>
+                </div>
+            </div>
+
+            <!-- Nút Xuất Ảnh Nâng Cấp (2K và 4K) -->
+            <label class="block text-sm font-bold text-gray-700 mb-2 mt-4 text-center">📥 Xuất Ảnh Thành Phẩm</label>
+            <div class="flex gap-3 mb-6">
+                <button id="btn-export-2k" onclick="exportImage('2k')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-2 rounded-xl shadow-lg transition transform hover:-translate-y-1 flex flex-col justify-center items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    <span class="text-sm">Tải Ảnh (2K)</span>
+                    <span class="text-[10px] font-normal opacity-80">Nhanh, nhẹ, post MXH</span>
+                </button>
+                <button id="btn-export-4k" onclick="exportImage('4k')" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-2 rounded-xl shadow-lg transition transform hover:-translate-y-1 flex flex-col justify-center items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    <span class="text-sm">Tải Ảnh (4K)</span>
+                    <span class="text-[10px] font-normal opacity-80">Rất nét, in ấn lớn</span>
+                </button>
+            </div>
 
             <hr class="my-6 border-gray-200">
 
@@ -1036,8 +866,7 @@
                 <ul class="text-sm text-blue-900 space-y-2 list-disc pl-4">
                     <li><strong>Sửa chữ trực tiếp:</strong> Nhấn thẳng vào bất kỳ dòng chữ nào trên poster để thay đổi nội dung (Tên trường, Họ tên...).</li>
                     <li><strong>Xuống dòng:</strong> Nếu câu tuyên dương quá dài, nhấn <kbd class="bg-blue-200 px-1 rounded text-xs font-mono">Enter</kbd> hoặc <kbd class="bg-blue-200 px-1 rounded text-xs font-mono">Shift+Enter</kbd> để ngắt dòng cho đẹp mắt.</li>
-                    <li><strong>Mẹo làm ảnh tạp chí:</strong> Sử dụng ảnh chân dung học sinh đã được xóa phông (đuôi .png nền trong suốt), kết hợp với chế độ khung ảnh số 11 (Toàn cảnh), poster sẽ trông chuyên nghiệp như một trang bìa tạp chí!</li>
-                    <li><strong>Bố cục nghệ thuật:</strong> Kết hợp mục "Bố cục nghệ thuật" với các tùy chọn Vector để ra vô vàn biến thể độc lạ.</li>
+                    <li><strong>Bố cục ảnh Ngang:</strong> Thử tải lên một bức ảnh ngang, chọn "Khổ Ngang" và mục khung ảnh "11. Toàn cảnh", poster sẽ trông như một banner Youtube tuyệt đẹp!</li>
                 </ul>
             </div>
         </aside>
@@ -1045,6 +874,59 @@
     </main>
 
     <script>
+        // --- CÁC BIẾN KÍCH THƯỚC TOÀN CỤC ---
+        let POSTER_WIDTH = 1080;
+        let POSTER_HEIGHT = 1350;
+
+        // --- LOGIC CHUYỂN ĐỔI HƯỚNG POSTER (NGANG / DỌC) ---
+        function changeOrientation(orientation) {
+            const container = document.getElementById('poster-container');
+            const btnPortrait = document.getElementById('btn-portrait');
+            const btnLandscape = document.getElementById('btn-landscape');
+            const layoutSelect = document.getElementById('text-layout-select');
+            const currentLayout = parseInt(layoutSelect.value);
+
+            if (orientation === 'landscape') {
+                container.style.width = '1920px';
+                container.style.height = '1080px';
+                container.setAttribute('data-orientation', 'landscape');
+                POSTER_WIDTH = 1920;
+                POSTER_HEIGHT = 1080;
+                
+                btnLandscape.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
+                btnLandscape.classList.remove('bg-white', 'text-gray-600', 'hover:bg-gray-50', 'border-gray-300');
+                
+                btnPortrait.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
+                btnPortrait.classList.add('bg-white', 'text-gray-600', 'hover:bg-gray-50', 'border-gray-300');
+
+                // Nếu đang dùng layout dọc, tự chuyển sang layout ngang đầu tiên
+                if (currentLayout <= 20) {
+                    changeTextLayout(21);
+                    layoutSelect.value = 21;
+                }
+
+            } else {
+                container.style.width = '1080px';
+                container.style.height = '1350px';
+                container.setAttribute('data-orientation', 'portrait');
+                POSTER_WIDTH = 1080;
+                POSTER_HEIGHT = 1350;
+
+                btnPortrait.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
+                btnPortrait.classList.remove('bg-white', 'text-gray-600', 'hover:bg-gray-50', 'border-gray-300');
+                
+                btnLandscape.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
+                btnLandscape.classList.add('bg-white', 'text-gray-600', 'hover:bg-gray-50', 'border-gray-300');
+
+                // Nếu đang dùng layout ngang, tự chuyển về layout dọc chuẩn
+                if (currentLayout > 20) {
+                    changeTextLayout(1);
+                    layoutSelect.value = 1;
+                }
+            }
+            adjustScale();
+        }
+
         // --- LOGIC TOGGLE MENU ---
         function toggleAdvancedOptions() {
             const optionsDiv = document.getElementById('advanced-options');
@@ -1069,10 +951,6 @@
         const viewport = document.getElementById('poster-viewport');
         const scaler = document.getElementById('poster-scaler');
         const colorPicker = document.getElementById('color-picker');
-
-        // Kích thước thật của poster
-        const POSTER_WIDTH = 1080;
-        const POSTER_HEIGHT = 1350;
 
         // Hàm thay đổi tỷ lệ hiển thị để vừa với màn hình
         function adjustScale() {
@@ -1196,7 +1074,7 @@
             layoutWrapper.classList.add(`layout-${styleIndex}`);
         }
 
-        // --- LOGIC ĐỔI VECTOR TRANG TRÍ (MỚI) ---
+        // --- LOGIC ĐỔI VECTOR TRANG TRÍ ---
         function changeVectorStyle(styleIndex) {
             const overlay = document.getElementById('vector-overlay');
             // Xóa style cũ và set lại class mặc định
@@ -1231,9 +1109,9 @@
             }
         }
 
-        // --- LOGIC CHỨC NĂNG THÔNG MINH (NGẪU NHIÊN) ---
+        // --- LOGIC CHỨC NĂNG THÔNG MINH (NGẪU NHIÊN TÙY THEO KHỔ ẢNH) ---
         function randomizeDesign() {
-            // Danh sách màu text tương ứng với 24 Mẫu nền (để đảm bảo chữ luôn dễ đọc)
+            // Danh sách màu text tương ứng với 24 Mẫu nền
             const themeColors = {
                 1: '#ffffff', 2: '#ffffff', 3: '#ffffff', 4: '#ffffff', 5: '#ffff00',
                 6: '#ffffff', 7: '#ffffff', 8: '#ffffff', 9: '#ffffff', 10: '#1f2937',
@@ -1242,82 +1120,184 @@
                 21: '#ffffff', 22: '#eaddcf', 23: '#1e3a8a', 24: '#ffffff'
             };
             
-            // Random Mẫu giao diện (từ 1 đến 24)
             const randomTheme = Math.floor(Math.random() * 24) + 1;
-            // Random Bố cục nghệ thuật (từ 1 đến 20)
-            const randomLayout = Math.floor(Math.random() * 20) + 1;
+            
+            // Kiểm tra xem poster đang ở khổ dọc hay ngang để chọn layout cho đúng
+            const isLandscape = document.getElementById('poster-container').getAttribute('data-orientation') === 'landscape';
+            let randomLayout;
 
-            // Áp dụng ngẫu nhiên
+            if (isLandscape) {
+                // Trộn từ 21 đến 30
+                randomLayout = Math.floor(Math.random() * 10) + 21;
+            } else {
+                // Trộn từ 1 đến 20
+                randomLayout = Math.floor(Math.random() * 20) + 1;
+            }
+
             changeTemplate(randomTheme, themeColors[randomTheme]);
             changeTextLayout(randomLayout);
 
-            // Đồng bộ cập nhật lại menu dropdown Bố cục
             const layoutSelect = document.getElementById('text-layout-select');
             if(layoutSelect) {
                 layoutSelect.value = randomLayout;
             }
         }
 
+        // --- MỚI: TÍNH NĂNG LƯU VÀ TẢI MẪU BẰNG LOCALSTORAGE ---
+        function getCurrentThemeIndex() {
+            const container = document.getElementById('poster-container');
+            for (let i = 1; i <= 24; i++) {
+                if (container.classList.contains('tpl-' + i)) return i;
+            }
+            return 1;
+        }
 
-        // --- LOGIC XUẤT ẢNH 4K BẰNG HTML2CANVAS ---
-        async function exportImage() {
-            // Lấy tên học sinh hiện tại để làm tên file mặc định
-            const studentNameEl = document.getElementById('student-name');
-            const studentName = studentNameEl ? studentNameEl.innerText.trim().replace(/\s+/g, '_') : 'Hoc_Sinh';
-            const suggestedFileName = `Tuyen_Duong_${studentName}.png`;
+        function saveTemplate() {
+            const config = {
+                orientation: document.getElementById('poster-container').getAttribute('data-orientation') || 'portrait',
+                mode: document.getElementById('mode-select') ? document.getElementById('mode-select').value : '1',
+                color: document.getElementById('color-picker').value,
+                layout: document.getElementById('text-layout-select') ? document.getElementById('text-layout-select').value : '1',
+                vector: document.getElementById('vector-style-select') ? document.getElementById('vector-style-select').value : '0',
+                nameStyle: document.getElementById('font-style-select') ? document.getElementById('font-style-select').value : '1',
+                titleStyle: document.getElementById('title-style-select') ? document.getElementById('title-style-select').value : '1',
+                
+                schoolName: document.getElementById('school-name').innerHTML,
+                commendationTitle: document.getElementById('commendation-title').innerHTML,
+                studentName: document.getElementById('student-name').innerHTML,
+                classBadge: document.getElementById('class-badge').innerHTML,
+                commendationText: document.getElementById('commendation-text').innerHTML,
+                
+                notes: document.getElementById('template-notes').value,
+                themeIndex: getCurrentThemeIndex()
+            };
             
-            // Hộp thoại chọn tên để lưu (Save As)
-            let fileName = prompt("Nhập tên file để lưu ảnh (nhấn OK để tải xuống):", suggestedFileName);
-            
-            // Nếu người dùng bấm Hủy (Cancel) trên hộp thoại
-            if (fileName === null) {
-                return; 
+            try {
+                localStorage.setItem('poster_tuyen_duong_saved_config', JSON.stringify(config));
+                alert('💾 Đã lưu cấu hình hiện tại! Lần sau vào lại bạn có thể bấm "Khôi phục" để tải lại.');
+            } catch (e) {
+                console.error("Lỗi khi lưu:", e);
+                alert("Không thể lưu cấu hình. Vui lòng kiểm tra lại trình duyệt.");
+            }
+        }
+
+        function loadTemplate() {
+            const dataStr = localStorage.getItem('poster_tuyen_duong_saved_config');
+            if (!dataStr) {
+                alert('Chưa có cấu hình nào được lưu trong máy bạn!');
+                return;
             }
             
-            // Đảm bảo đuôi file luôn là .png
+            try {
+                const config = JSON.parse(dataStr);
+                
+                if (config.orientation) changeOrientation(config.orientation);
+                
+                if (config.mode) {
+                    const el = document.getElementById('mode-select');
+                    if(el) { el.value = config.mode; changeImageMode(config.mode); }
+                }
+                
+                if (config.color && config.themeIndex) {
+                    changeTemplate(config.themeIndex, config.color);
+                }
+                
+                if (config.layout) {
+                    const el = document.getElementById('text-layout-select');
+                    if(el) { el.value = config.layout; changeTextLayout(config.layout); }
+                }
+                
+                if (config.vector) {
+                    const el = document.getElementById('vector-style-select');
+                    if(el) { el.value = config.vector; changeVectorStyle(config.vector); }
+                }
+                
+                if (config.nameStyle) {
+                    const el = document.getElementById('font-style-select');
+                    if(el) { el.value = config.nameStyle; changeNameStyle(config.nameStyle); }
+                }
+                
+                if (config.titleStyle) {
+                    const el = document.getElementById('title-style-select');
+                    if(el) { el.value = config.titleStyle; changeTitleStyle(config.titleStyle); }
+                }
+                
+                if (config.schoolName) document.getElementById('school-name').innerHTML = config.schoolName;
+                if (config.commendationTitle) document.getElementById('commendation-title').innerHTML = config.commendationTitle;
+                if (config.studentName) document.getElementById('student-name').innerHTML = config.studentName;
+                if (config.classBadge) document.getElementById('class-badge').innerHTML = config.classBadge;
+                if (config.commendationText) document.getElementById('commendation-text').innerHTML = config.commendationText;
+                
+                if (config.notes !== undefined) document.getElementById('template-notes').value = config.notes;
+                
+                alert('📂 Đã tải lại toàn bộ cấu hình cũ thành công!');
+            } catch (e) {
+                console.error("Lỗi khi tải mẫu:", e);
+                alert("File lưu bị lỗi, không thể khôi phục!");
+            }
+        }
+
+
+        // --- LOGIC XUẤT ẢNH BẰNG HTML2CANVAS ---
+        async function exportImage(resolution) {
+            const studentNameEl = document.getElementById('student-name');
+            const studentName = studentNameEl ? studentNameEl.innerText.trim().replace(/\s+/g, '_') : 'Hoc_Sinh';
+            const suffix = POSTER_WIDTH > POSTER_HEIGHT ? "Ngang" : "Doc";
+            const qualitySuffix = resolution === '4k' ? '4K' : '2K';
+            const suggestedFileName = `Tuyen_Duong_${studentName}_${suffix}_${qualitySuffix}.png`;
+            
+            let fileName = prompt("Nhập tên file để lưu ảnh (nhấn OK để tải xuống):", suggestedFileName);
+            if (fileName === null) return; 
+            
             if (!fileName.toLowerCase().endsWith('.png')) {
                 fileName += '.png';
             }
 
-            const btn = document.getElementById('export-btn');
-            const originalText = btn.innerHTML;
+            const btn2k = document.getElementById('btn-export-2k');
+            const btn4k = document.getElementById('btn-export-4k');
             
-            // Xóa focus để ẩn con trỏ nhấp nháy trên giao diện
+            const btnTarget = resolution === '4k' ? btn4k : btn2k;
+            const originalText = btnTarget.innerHTML;
+            
             if (document.activeElement) {
                 document.activeElement.blur();
             }
 
-            // Hiệu ứng nút đang xử lý
-            btn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Đang kết xuất ảnh 4K...`;
-            btn.disabled = true;
-            btn.classList.add('opacity-75', 'cursor-not-allowed');
+            // Loading state
+            btnTarget.innerHTML = `<svg class="animate-spin h-5 w-5 text-white inline-block mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span class="text-sm">Đang tải...</span>`;
+            btn2k.disabled = true; btn4k.disabled = true;
+            btn2k.classList.add('opacity-50', 'cursor-not-allowed');
+            btn4k.classList.add('opacity-50', 'cursor-not-allowed');
 
             try {
-                // TRICK CHO ĐIỆN THOẠI: Thay vì phóng to thu nhỏ ở màn hình thật làm giật hình
-                // Ta chỉ gỡ bỏ tỷ lệ scale ở bản nháp (clone) đưa vào html2canvas
+                // Tính toán tỷ lệ dựa vào cấu hình người dùng chọn
+                let renderScale = 2; 
+                if (resolution === '4k') {
+                    renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 2 : 3; 
+                } else {
+                    // 2K Resolution
+                    renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 1.5 : 2; 
+                }
+
                 const canvas = await html2canvas(posterContainer, {
-                    scale: 3, 
+                    scale: renderScale, 
                     useCORS: true,
                     allowTaint: true,
                     backgroundColor: null,
                     width: POSTER_WIDTH,
                     height: POSTER_HEIGHT,
-                    windowWidth: POSTER_WIDTH, // Ép hệ thống render coi như cửa sổ đủ rộng
+                    windowWidth: POSTER_WIDTH,
                     windowHeight: POSTER_HEIGHT,
                     onclone: function(clonedDoc) {
-                        // Tìm khung ở bản clone và gỡ bỏ phép thu nhỏ
-                        const clonedScaler = clonedDoc.getElementById('poster-scaler');
-                        if (clonedScaler) {
-                            clonedScaler.style.transform = 'none';
-                        }
                         const clonedContainer = clonedDoc.getElementById('poster-container');
                         if (clonedContainer) {
                             clonedContainer.style.transform = 'none';
+                            clonedContainer.style.width = POSTER_WIDTH + 'px';
+                            clonedContainer.style.height = POSTER_HEIGHT + 'px';
                         }
                     }
                 });
 
-                // Hàm hỗ trợ tải xuống truyền thống (Fallback)
                 const triggerDownload = (blobData, name) => {
                     const url = window.URL.createObjectURL(blobData);
                     const link = document.createElement('a');
@@ -1330,27 +1310,16 @@
                     document.body.removeChild(link);
                 };
 
-                // Chuyển Canvas thành Blob để tương thích với tính năng Chia sẻ (Share)
                 const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
                 const file = new File([blob], fileName, { type: 'image/png' });
 
-                // Kiểm tra xem trình duyệt/thiết bị có hỗ trợ tính năng Chia sẻ file không (Thường là Mobile)
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     try {
-                        // Mở hộp thoại Share của hệ điều hành (Lưu ảnh, Zalo, FB, AirDrop...)
-                        await navigator.share({
-                            files: [file],
-                            title: fileName
-                        });
+                        await navigator.share({ files: [file], title: fileName });
                     } catch (err) {
-                        // Nếu người dùng bấm Hủy hộp thoại share, không làm gì cả
-                        // Nếu lỗi do hệ thống, chuyển về cách tải xuống truyền thống
-                        if (err.name !== 'AbortError') {
-                            triggerDownload(blob, fileName);
-                        }
+                        if (err.name !== 'AbortError') triggerDownload(blob, fileName);
                     }
                 } else {
-                    // Nếu dùng PC không hỗ trợ Share, tải xuống file trực tiếp
                     triggerDownload(blob, fileName);
                 }
 
@@ -1358,10 +1327,11 @@
                 console.error("Lỗi xuất ảnh:", error);
                 alert("Đã xảy ra lỗi khi xuất ảnh. Vui lòng thử lại!");
             } finally {
-                // Khôi phục nút bấm
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                // Restore buttons
+                btnTarget.innerHTML = originalText;
+                btn2k.disabled = false; btn4k.disabled = false;
+                btn2k.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn4k.classList.remove('opacity-50', 'cursor-not-allowed');
             }
         }
     </script>
