@@ -611,13 +611,21 @@
             <!-- CHỨC NĂNG THÔNG MINH (TRỘN NGẪU NHIÊN) - Đưa ra ngoài -->
             <div class="mb-6">
                 <label class="block text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-3">3. 🪄 Phép màu ngẫu nhiên</label>
-                <button onclick="randomizeDesign()" class="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
-                    </svg>
-                    Trộn Giao Diện & Bố Cục
-                </button>
-                <p class="text-xs text-gray-500 text-center mt-2">Nhấn để hệ thống tự động thiết kế cho bạn 1 phiên bản độc đáo!</p>
+                <div class="flex flex-col gap-2">
+                    <button onclick="randomizeDesign()" class="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                        </svg>
+                        Trộn Nền & Bố Cục Chữ
+                    </button>
+                    <button onclick="randomizeFrameAndLayout()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                        </svg>
+                        Trộn Khung Ảnh & Bố Cục
+                    </button>
+                </div>
+                <p class="text-xs text-gray-500 text-center mt-2">Nhấn để hệ thống tự động thiết kế cho bạn các phiên bản độc đáo!</p>
             </div>
 
             <!-- Gợi ý Lời Tuyên Dương - Đưa ra ngoài -->
@@ -1143,6 +1151,34 @@
             }
         }
 
+        function randomizeFrameAndLayout() {
+            const isLandscape = document.getElementById('poster-container').getAttribute('data-orientation') === 'landscape';
+            
+            // Random Image Mode (từ 1 đến 15)
+            const randomMode = Math.floor(Math.random() * 15) + 1;
+            
+            // Random Layout (tùy thuộc khổ ảnh)
+            let randomLayout;
+            if (isLandscape) {
+                // Trộn từ 21 đến 30
+                randomLayout = Math.floor(Math.random() * 10) + 21;
+            } else {
+                // Trộn từ 1 đến 20
+                randomLayout = Math.floor(Math.random() * 20) + 1;
+            }
+
+            // Áp dụng
+            changeImageMode(randomMode);
+            changeTextLayout(randomLayout);
+
+            // Đồng bộ select menu
+            const modeSelect = document.getElementById('mode-select');
+            if (modeSelect) modeSelect.value = randomMode;
+
+            const layoutSelect = document.getElementById('text-layout-select');
+            if (layoutSelect) layoutSelect.value = randomLayout;
+        }
+
         // --- MỚI: TÍNH NĂNG LƯU VÀ TẢI MẪU BẰNG LOCALSTORAGE ---
         function getCurrentThemeIndex() {
             const container = document.getElementById('poster-container');
@@ -1273,10 +1309,10 @@
                 // Tính toán tỷ lệ dựa vào cấu hình người dùng chọn
                 let renderScale = 2; 
                 if (resolution === '4k') {
-                    renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 2 : 3; 
+                    renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 3 : 4; // Siêu nét (Ngang: 5760px | Dọc: 4320px)
                 } else {
-                    // 2K Resolution
-                    renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 1.5 : 2; 
+                    // 2K Resolution (> HD)
+                    renderScale = 2; // Rất sắc nét (Ngang: 3840px | Dọc: 2160px)
                 }
 
                 const canvas = await html2canvas(posterContainer, {
