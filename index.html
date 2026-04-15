@@ -1290,29 +1290,24 @@
             }
 
             const btn2k = document.getElementById('btn-export-2k');
-            const btn4k = document.getElementById('btn-export-4k');
-            
-            const btnTarget = resolution === '4k' ? btn4k : btn2k;
-            const originalText = btnTarget.innerHTML;
-            
-            if (document.activeElement) {
-                document.activeElement.blur();
-            }
-
-            // Loading state
+            // Hiệu ứng nút đang xử lý
             btnTarget.innerHTML = `<svg class="animate-spin h-5 w-5 text-white inline-block mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span class="text-sm">Đang tải...</span>`;
             btn2k.disabled = true; btn4k.disabled = true;
             btn2k.classList.add('opacity-50', 'cursor-not-allowed');
             btn4k.classList.add('opacity-50', 'cursor-not-allowed');
 
+            // Đưa trang về đầu để tránh lỗi tọa độ trên mobile
+            window.scrollTo(0, 0);
+
             try {
                 // Tính toán tỷ lệ dựa vào cấu hình người dùng chọn
                 let renderScale = 2; 
                 if (resolution === '4k') {
-                    renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 3 : 4; // Siêu nét (Ngang: 5760px | Dọc: 4320px)
+                    // Giữ mức độ nét cao nhưng an toàn cho RAM Mobile (iOS giới hạn max 16 Megapixels cho Canvas)
+                    renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 2.5 : 3; 
                 } else {
                     // 2K Resolution (> HD)
-                    renderScale = 2; // Rất sắc nét (Ngang: 3840px | Dọc: 2160px)
+                    renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 1.5 : 2; 
                 }
 
                 const canvas = await html2canvas(posterContainer, {
@@ -1322,14 +1317,19 @@
                     backgroundColor: null,
                     width: POSTER_WIDTH,
                     height: POSTER_HEIGHT,
-                    windowWidth: POSTER_WIDTH,
-                    windowHeight: POSTER_HEIGHT,
                     onclone: function(clonedDoc) {
+                        // QUAN TRỌNG: Phải xóa bỏ hiệu ứng thu nhỏ của lớp bọc bên ngoài trên mobile
+                        const clonedScaler = clonedDoc.getElementById('poster-scaler');
+                        if (clonedScaler) {
+                            clonedScaler.style.transform = 'none';
+                        }
+
                         const clonedContainer = clonedDoc.getElementById('poster-container');
                         if (clonedContainer) {
                             clonedContainer.style.transform = 'none';
                             clonedContainer.style.width = POSTER_WIDTH + 'px';
                             clonedContainer.style.height = POSTER_HEIGHT + 'px';
+                            clonedContainer.style.margin = '0';
                         }
                     }
                 });
