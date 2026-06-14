@@ -1495,11 +1495,32 @@ Trần Thị B;10A8;Vì sự nỗ lực vượt bậc trong học tập..." onin
                 backgroundColor: null,
                 width: POSTER_WIDTH,
                 height: POSTER_HEIGHT,
+                // QUAN TRỌNG: Cố định kích thước "khung nhìn" ảo của html2canvas bằng đúng
+                // kích thước thật của poster. Nếu không, trên điện thoại html2canvas sẽ
+                // dùng kích thước màn hình thực (nhỏ hơn) để tính toán layout, khiến
+                // ảnh xuất ra bị co giãn / sai tỉ lệ so với bản gốc.
+                windowWidth: POSTER_WIDTH,
+                windowHeight: POSTER_HEIGHT,
+                scrollX: 0,
+                scrollY: 0,
+                x: 0,
+                y: 0,
                 onclone: function(clonedDoc) {
-                    // QUAN TRỌNG: Phải xóa bỏ hiệu ứng thu nhỏ của lớp bọc bên ngoài trên mobile
+                    // QUAN TRỌNG: Phải xóa bỏ hiệu ứng thu nhỏ của lớp bọc bên ngoài trên mobile,
+                    // đồng thời loại bỏ giới hạn overflow/kích thước của khung xem trước
+                    // (vốn bị bóp nhỏ theo màn hình điện thoại) để poster được render đúng kích thước gốc.
+                    const clonedViewport = clonedDoc.getElementById('poster-viewport');
+                    if (clonedViewport) {
+                        clonedViewport.style.width = POSTER_WIDTH + 'px';
+                        clonedViewport.style.height = POSTER_HEIGHT + 'px';
+                        clonedViewport.style.overflow = 'visible';
+                    }
+
                     const clonedScaler = clonedDoc.getElementById('poster-scaler');
                     if (clonedScaler) {
                         clonedScaler.style.transform = 'none';
+                        clonedScaler.style.width = POSTER_WIDTH + 'px';
+                        clonedScaler.style.height = POSTER_HEIGHT + 'px';
                     }
 
                     const clonedContainer = clonedDoc.getElementById('poster-container');
