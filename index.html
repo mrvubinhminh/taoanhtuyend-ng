@@ -227,6 +227,11 @@
             height: 100%;
             object-fit: cover;
             object-position: top center;
+            cursor: grab;
+            touch-action: none;
+        }
+        .photo-frame img:active {
+            cursor: grabbing;
         }
 
         .photo-frame::after {
@@ -591,6 +596,12 @@
                 </div>
             </div>
 
+            <!-- TOGGLE BẬT/TẮT WATERMARK TÊN TRƯỜNG -->
+            <div class="mb-6 flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <label for="watermark-toggle" class="text-sm font-semibold text-gray-700 cursor-pointer">🏫 Hiển thị tên trường trên poster</label>
+                <input type="checkbox" id="watermark-toggle" checked onchange="toggleWatermark(this.checked)" class="w-5 h-5 accent-indigo-600 cursor-pointer">
+            </div>
+
             <!-- Upload Ảnh (Luôn hiện để thao tác nhanh) -->
             <div class="mb-6">
                 <label class="block text-sm font-semibold text-gray-700 mb-2">2. Tải ảnh học sinh lên</label>
@@ -606,6 +617,18 @@
                         <input id="image-upload" type="file" class="hidden" accept="image/*" />
                     </label>
                 </div>
+            </div>
+
+            <!-- CÔNG CỤ CHỈNH ẢNH (ZOOM / DI CHUYỂN) -->
+            <div class="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label class="block text-sm font-bold text-gray-700 mb-2">🖼️ Công cụ chỉnh ảnh</label>
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-xs text-gray-500 w-12">Zoom</span>
+                    <input type="range" id="photo-zoom" min="100" max="250" value="100" class="flex-1 accent-indigo-600">
+                    <span id="photo-zoom-value" class="text-xs text-gray-600 w-12 text-right font-mono">100%</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-2">💡 Kéo (rê chuột hoặc lướt tay) trực tiếp trên ảnh trong khung để di chuyển vị trí ảnh.</p>
+                <button onclick="resetPhotoPosition()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-semibold py-2 rounded-lg transition">↺ Đặt lại vị trí ảnh (Mặc định)</button>
             </div>
 
             <!-- CHỨC NĂNG THÔNG MINH (TRỘN NGẪU NHIÊN) - Đưa ra ngoài -->
@@ -861,6 +884,20 @@
                 </button>
             </div>
 
+            <!-- Nút Copy Clipboard & Lưu vào Album -->
+            <div class="flex gap-3 mb-6">
+                <button id="btn-copy-clipboard" onclick="copyImageToClipboard()" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-2 rounded-xl shadow-lg transition transform hover:-translate-y-1 flex flex-col justify-center items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                    <span class="text-sm">Copy Ảnh</span>
+                    <span class="text-[10px] font-normal opacity-80">Dán vào Zalo, Word...</span>
+                </button>
+                <button id="btn-save-album" onclick="saveToAlbum()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-2 rounded-xl shadow-lg transition transform hover:-translate-y-1 flex flex-col justify-center items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14M14 8h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    <span class="text-sm">Lưu vào Album</span>
+                    <span class="text-[10px] font-normal opacity-80">Lưu thư viện ảnh máy</span>
+                </button>
+            </div>
+
             <hr class="my-6 border-gray-200">
 
             <!-- Hướng dẫn & Tips -->
@@ -991,10 +1028,86 @@
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     studentPhoto.src = event.target.result;
+                    // Đặt lại vị trí/zoom ảnh mỗi khi tải ảnh mới
+                    resetPhotoPosition();
                 };
                 reader.readAsDataURL(file);
             }
         });
+
+        // --- LOGIC CÔNG CỤ CHỈNH ẢNH (ZOOM & DI CHUYỂN VỊ TRÍ) ---
+        let photoScale = 1, photoX = 0, photoY = 0;
+        let isDraggingPhoto = false, dragStartX = 0, dragStartY = 0, startPhotoX = 0, startPhotoY = 0;
+        const photoZoomSlider = document.getElementById('photo-zoom');
+        const photoZoomValue = document.getElementById('photo-zoom-value');
+
+        function applyPhotoTransform() {
+            studentPhoto.style.transform = `translate(${photoX}px, ${photoY}px) scale(${photoScale})`;
+        }
+
+        function resetPhotoPosition() {
+            photoScale = 1;
+            photoX = 0;
+            photoY = 0;
+            if (photoZoomSlider) photoZoomSlider.value = 100;
+            if (photoZoomValue) photoZoomValue.innerText = '100%';
+            applyPhotoTransform();
+        }
+
+        if (photoZoomSlider) {
+            photoZoomSlider.addEventListener('input', function(e) {
+                photoScale = parseInt(e.target.value, 10) / 100;
+                photoZoomValue.innerText = e.target.value + '%';
+                applyPhotoTransform();
+            });
+        }
+
+        // Kéo bằng chuột (Desktop)
+        studentPhoto.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            isDraggingPhoto = true;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+            startPhotoX = photoX;
+            startPhotoY = photoY;
+        });
+        window.addEventListener('mousemove', function(e) {
+            if (!isDraggingPhoto) return;
+            photoX = startPhotoX + (e.clientX - dragStartX);
+            photoY = startPhotoY + (e.clientY - dragStartY);
+            applyPhotoTransform();
+        });
+        window.addEventListener('mouseup', function() {
+            isDraggingPhoto = false;
+        });
+
+        // Kéo bằng ngón tay (Mobile)
+        studentPhoto.addEventListener('touchstart', function(e) {
+            if (e.touches.length !== 1) return;
+            isDraggingPhoto = true;
+            dragStartX = e.touches[0].clientX;
+            dragStartY = e.touches[0].clientY;
+            startPhotoX = photoX;
+            startPhotoY = photoY;
+        }, { passive: true });
+        window.addEventListener('touchmove', function(e) {
+            if (!isDraggingPhoto || e.touches.length !== 1) return;
+            photoX = startPhotoX + (e.touches[0].clientX - dragStartX);
+            photoY = startPhotoY + (e.touches[0].clientY - dragStartY);
+            applyPhotoTransform();
+        }, { passive: true });
+        window.addEventListener('touchend', function() {
+            isDraggingPhoto = false;
+        });
+
+        // --- LOGIC TOGGLE BẬT/TẮT TÊN TRƯỜNG (WATERMARK) ---
+        function toggleWatermark(show) {
+            const schoolEl = document.getElementById('school-name');
+            const topSection = schoolEl ? schoolEl.closest('.top-section') : null;
+            if (topSection) {
+                topSection.style.display = show ? '' : 'none';
+            }
+        }
 
 
         // --- LOGIC CHỌN TEMPLATE & ĐỔI MÀU CHỮ ---
@@ -1205,7 +1318,12 @@
                 commendationText: document.getElementById('commendation-text').innerHTML,
                 
                 notes: document.getElementById('template-notes').value,
-                themeIndex: getCurrentThemeIndex()
+                themeIndex: getCurrentThemeIndex(),
+
+                showSchoolName: document.getElementById('watermark-toggle') ? document.getElementById('watermark-toggle').checked : true,
+                photoScale: photoScale,
+                photoX: photoX,
+                photoY: photoY
             };
             
             try {
@@ -1265,7 +1383,24 @@
                 if (config.commendationText) document.getElementById('commendation-text').innerHTML = config.commendationText;
                 
                 if (config.notes !== undefined) document.getElementById('template-notes').value = config.notes;
-                
+
+                if (config.showSchoolName !== undefined) {
+                    const wmToggle = document.getElementById('watermark-toggle');
+                    if (wmToggle) wmToggle.checked = config.showSchoolName;
+                    toggleWatermark(config.showSchoolName);
+                }
+
+                if (typeof config.photoScale === 'number' || typeof config.photoX === 'number' || typeof config.photoY === 'number') {
+                    photoScale = typeof config.photoScale === 'number' ? config.photoScale : 1;
+                    photoX = typeof config.photoX === 'number' ? config.photoX : 0;
+                    photoY = typeof config.photoY === 'number' ? config.photoY : 0;
+                    if (photoZoomSlider) {
+                        photoZoomSlider.value = Math.round(photoScale * 100);
+                        photoZoomValue.innerText = Math.round(photoScale * 100) + '%';
+                    }
+                    applyPhotoTransform();
+                }
+
                 alert('📂 Đã tải lại toàn bộ cấu hình cũ thành công!');
             } catch (e) {
                 console.error("Lỗi khi tải mẫu:", e);
@@ -1274,22 +1409,58 @@
         }
 
 
-        // --- LOGIC XUẤT ẢNH BẰNG HTML2CANVAS ---
-        async function exportImage(resolution) {
+        // --- HÀM DÙNG CHUNG: TẠO CANVAS TỪ POSTER (DÙNG CHO TẢI ẢNH, COPY, LƯU ALBUM) ---
+        async function generateCanvas(renderScale) {
+            return await html2canvas(posterContainer, {
+                scale: renderScale,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: null,
+                width: POSTER_WIDTH,
+                height: POSTER_HEIGHT,
+                onclone: function(clonedDoc) {
+                    // QUAN TRỌNG: Phải xóa bỏ hiệu ứng thu nhỏ của lớp bọc bên ngoài trên mobile
+                    const clonedScaler = clonedDoc.getElementById('poster-scaler');
+                    if (clonedScaler) {
+                        clonedScaler.style.transform = 'none';
+                    }
+
+                    const clonedContainer = clonedDoc.getElementById('poster-container');
+                    if (clonedContainer) {
+                        clonedContainer.style.transform = 'none';
+                        clonedContainer.style.width = POSTER_WIDTH + 'px';
+                        clonedContainer.style.height = POSTER_HEIGHT + 'px';
+                        clonedContainer.style.margin = '0';
+                    }
+                }
+            });
+        }
+
+        // Hàm phụ trợ: Tạo tên file gợi ý dựa trên tên học sinh & khổ poster
+        function getSuggestedFileName(qualitySuffix) {
             const studentNameEl = document.getElementById('student-name');
             const studentName = studentNameEl ? studentNameEl.innerText.trim().replace(/\s+/g, '_') : 'Hoc_Sinh';
             const suffix = POSTER_WIDTH > POSTER_HEIGHT ? "Ngang" : "Doc";
+            return `Tuyen_Duong_${studentName}_${suffix}${qualitySuffix ? '_' + qualitySuffix : ''}.png`;
+        }
+
+        // --- LOGIC XUẤT ẢNH BẰNG HTML2CANVAS ---
+        async function exportImage(resolution) {
             const qualitySuffix = resolution === '4k' ? '4K' : '2K';
-            const suggestedFileName = `Tuyen_Duong_${studentName}_${suffix}_${qualitySuffix}.png`;
-            
+            const suggestedFileName = getSuggestedFileName(qualitySuffix);
+
             let fileName = prompt("Nhập tên file để lưu ảnh (nhấn OK để tải xuống):", suggestedFileName);
-            if (fileName === null) return; 
-            
+            if (fileName === null) return;
+
             if (!fileName.toLowerCase().endsWith('.png')) {
                 fileName += '.png';
             }
 
             const btn2k = document.getElementById('btn-export-2k');
+            const btn4k = document.getElementById('btn-export-4k');
+            const btnTarget = resolution === '4k' ? btn4k : btn2k;
+            const originalText = btnTarget.innerHTML;
+
             // Hiệu ứng nút đang xử lý
             btnTarget.innerHTML = `<svg class="animate-spin h-5 w-5 text-white inline-block mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span class="text-sm">Đang tải...</span>`;
             btn2k.disabled = true; btn4k.disabled = true;
@@ -1301,38 +1472,16 @@
 
             try {
                 // Tính toán tỷ lệ dựa vào cấu hình người dùng chọn
-                let renderScale = 2; 
+                let renderScale = 2;
                 if (resolution === '4k') {
                     // Giữ mức độ nét cao nhưng an toàn cho RAM Mobile (iOS giới hạn max 16 Megapixels cho Canvas)
-                    renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 2.5 : 3; 
+                    renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 2.5 : 3;
                 } else {
                     // 2K Resolution (> HD)
-                    renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 1.5 : 2; 
+                    renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 1.5 : 2;
                 }
 
-                const canvas = await html2canvas(posterContainer, {
-                    scale: renderScale, 
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: null,
-                    width: POSTER_WIDTH,
-                    height: POSTER_HEIGHT,
-                    onclone: function(clonedDoc) {
-                        // QUAN TRỌNG: Phải xóa bỏ hiệu ứng thu nhỏ của lớp bọc bên ngoài trên mobile
-                        const clonedScaler = clonedDoc.getElementById('poster-scaler');
-                        if (clonedScaler) {
-                            clonedScaler.style.transform = 'none';
-                        }
-
-                        const clonedContainer = clonedDoc.getElementById('poster-container');
-                        if (clonedContainer) {
-                            clonedContainer.style.transform = 'none';
-                            clonedContainer.style.width = POSTER_WIDTH + 'px';
-                            clonedContainer.style.height = POSTER_HEIGHT + 'px';
-                            clonedContainer.style.margin = '0';
-                        }
-                    }
-                });
+                const canvas = await generateCanvas(renderScale);
 
                 const triggerDownload = (blobData, name) => {
                     const url = window.URL.createObjectURL(blobData);
@@ -1368,6 +1517,90 @@
                 btn2k.disabled = false; btn4k.disabled = false;
                 btn2k.classList.remove('opacity-50', 'cursor-not-allowed');
                 btn4k.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        // --- LOGIC COPY ẢNH VÀO CLIPBOARD ---
+        async function copyImageToClipboard() {
+            const btn = document.getElementById('btn-copy-clipboard');
+
+            if (!navigator.clipboard || typeof ClipboardItem === 'undefined') {
+                alert('⚠️ Trình duyệt này không hỗ trợ Copy ảnh vào Clipboard.\nVui lòng dùng nút "Tải Ảnh" thay thế.');
+                return;
+            }
+
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white inline-block mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span class="text-sm">Đang copy...</span>`;
+
+            window.scrollTo(0, 0);
+
+            try {
+                const renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 1.5 : 2;
+                const canvas = await generateCanvas(renderScale);
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+
+                await navigator.clipboard.write([
+                    new ClipboardItem({ 'image/png': blob })
+                ]);
+
+                alert('✅ Đã copy ảnh vào Clipboard!\nBạn có thể dán (Ctrl+V hoặc Cmd+V) ảnh vào Zalo, Word, Messenger, Email...');
+            } catch (error) {
+                console.error("Lỗi copy ảnh:", error);
+                alert('⚠️ Không thể copy ảnh vào Clipboard. Một số trình duyệt yêu cầu kết nối HTTPS hoặc cấp quyền Clipboard.\nVui lòng dùng nút "Tải Ảnh" thay thế.');
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.innerHTML = originalHTML;
+            }
+        }
+
+        // --- LOGIC LƯU ẢNH VÀO ALBUM / THƯ VIỆN ẢNH (ĐIỆN THOẠI) ---
+        async function saveToAlbum() {
+            const btn = document.getElementById('btn-save-album');
+            const originalHTML = btn.innerHTML;
+
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white inline-block mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span class="text-sm">Đang xử lý...</span>`;
+
+            window.scrollTo(0, 0);
+
+            try {
+                const renderScale = POSTER_WIDTH > POSTER_HEIGHT ? 1.5 : 2;
+                const canvas = await generateCanvas(renderScale);
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+                const fileName = getSuggestedFileName('');
+                const file = new File([blob], fileName, { type: 'image/png' });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    // Trên điện thoại: mở Share Sheet, chọn "Lưu vào Ảnh/Album"
+                    try {
+                        await navigator.share({ files: [file], title: fileName });
+                    } catch (err) {
+                        if (err.name !== 'AbortError') throw err;
+                    }
+                } else {
+                    // Trên máy tính hoặc trình duyệt không hỗ trợ Share API: tải về và hướng dẫn
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.style.display = 'none';
+                    link.href = url;
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(link);
+                    alert('📥 Ảnh đã được tải xuống.\nTrên điện thoại, hãy mở ảnh từ thư mục Tải xuống (Downloads) và chọn "Lưu vào Album/Thư viện ảnh".');
+                }
+            } catch (error) {
+                console.error("Lỗi lưu vào Album:", error);
+                alert("Đã xảy ra lỗi khi lưu ảnh. Vui lòng thử lại!");
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.innerHTML = originalHTML;
             }
         }
     </script>
